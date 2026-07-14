@@ -1,12 +1,19 @@
-{%- unless settings.type_body_font.system? -%}
-  {{ settings.type_body_font | font_url | preload_tag: as: 'font', type: 'font/woff2', fetchpriority: 'low' }}
+{%- doc -%}
+  Preload at most two critical font faces (body + heading). Subheading and accent
+  load via @font-face with font-display: swap in theme-styles-variables.
+{%- enddoc -%}
+
+{%- liquid
+  assign body_font = settings.type_body_font
+  assign heading_font = settings.type_heading_font
+-%}
+
+{%- unless body_font.system? -%}
+  {{ body_font | font_url | preload_tag: as: 'font', type: 'font/woff2', fetchpriority: 'low' }}
 {%- endunless -%}
-{%- unless settings.type_subheading_font.system? -%}
-  {{ settings.type_subheading_font | font_url | preload_tag: as: 'font', type: 'font/woff2', fetchpriority: 'low' }}
-{%- endunless -%}
-{%- unless settings.type_heading_font.system? -%}
-  {{ settings.type_heading_font | font_url | preload_tag: as: 'font', type: 'font/woff2', fetchpriority: 'low' }}
-{%- endunless -%}
-{%- unless settings.type_accent_font.system? -%}
-  {{ settings.type_accent_font | font_url | preload_tag: as: 'font', type: 'font/woff2', fetchpriority: 'low' }}
+
+{%- unless heading_font.system? -%}
+  {%- if heading_font.family != body_font.family or heading_font.weight != body_font.weight or heading_font.style != body_font.style -%}
+    {{ heading_font | font_url | preload_tag: as: 'font', type: 'font/woff2', fetchpriority: 'low' }}
+  {%- endif -%}
 {%- endunless -%}
