@@ -74,8 +74,10 @@
         if block_index == 0 and section_index == 1
           assign fetchpriority = 'high'
           assign image_preload = true
-        elsif block_index > 0
-          assign fetchpriority = 'auto'
+        endif
+
+        if block_index > 0
+          assign sizes = '50vw'
         endif
       -%}
 
@@ -112,10 +114,17 @@
               preload: image_preload
           }}
         {%- endif -%}
-        {{
-          block_settings.video_1
-          | video_tag: poster: nil, autoplay: true, loop: true, controls: false, muted: true, class: 'slide__video'
-        }}
+        {%- if block_index == 0 -%}
+          {{
+            block_settings.video_1
+            | video_tag: poster: nil, autoplay: true, loop: true, controls: false, muted: true, class: 'slide__video'
+          }}
+        {%- else -%}
+          {{
+            block_settings.video_1
+            | video_tag: poster: nil, autoplay: false, loop: true, controls: false, muted: true, class: 'slide__video', preload: 'none'
+          }}
+        {%- endif -%}
       {%- endif -%}
     {%- else -%}
       {%- liquid
