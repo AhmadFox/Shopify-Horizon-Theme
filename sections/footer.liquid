@@ -42,6 +42,9 @@
       {% if has_isolated_grid_item_desktop %}footer-content--isolated-grid-item-desktop{% endif %}
       {% if has_isolated_grid_item_tablet %}footer-content--isolated-grid-item-tablet{% endif %}
     "
+    {% if settings.animations_reveal_on_scroll %}
+      data-scroll-reveal-cascade
+    {% endif %}
     style="
       {%  render 'spacing-style', settings: section.settings %}
       --footer-gap: {{ section.settings.gap }}px;

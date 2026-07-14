@@ -1,6 +1,24 @@
 const SCROLL_TRIGGER_CLASS = 'scroll-trigger';
 const OFFSCREEN_CLASS = 'scroll-trigger--offscreen';
 const DESIGN_MODE_CLASS = 'scroll-trigger--design-mode';
+const CASCADE_SELECTOR = '[data-scroll-reveal-cascade]';
+
+/**
+ * @param {ParentNode} rootEl
+ */
+function decorateCascadeContainers(rootEl) {
+  rootEl.querySelectorAll(CASCADE_SELECTOR).forEach((container) => {
+    Array.from(container.children).forEach((child, index) => {
+      if (child.classList.contains(SCROLL_TRIGGER_CLASS)) return;
+
+      child.classList.add(SCROLL_TRIGGER_CLASS, 'animate--slide-in');
+
+      if (!child.style.getPropertyValue('--animation-order')) {
+        child.style.setProperty('--animation-order', String(index + 1));
+      }
+    });
+  });
+}
 
 /**
  * @param {IntersectionObserverEntry[]} entries
@@ -25,6 +43,8 @@ function onIntersection(entries, observer) {
  * @param {boolean} [isDesignModeEvent]
  */
 function initializeScrollReveal(rootEl = document, isDesignModeEvent = false) {
+  decorateCascadeContainers(rootEl);
+
   const elements = rootEl.getElementsByClassName(SCROLL_TRIGGER_CLASS);
   if (!elements.length) return;
 
