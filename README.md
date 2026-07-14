@@ -35,6 +35,23 @@ shopify theme dev --store your-store.myshopify.com
 shopify theme check
 ```
 
+## Auto-deploy (GitHub → Shopify)
+
+The store is connected to this repo’s **`main`** branch via Shopify’s GitHub integration (`Shopify-Horizon-Theme/main`).
+
+**Every push or merge to `main` automatically updates the connected theme.** No GitHub Actions needed.
+
+```bash
+# Release workflow
+git checkout main
+git merge feature/horizon-RTL-support
+git push origin main   # → Shopify auto-syncs
+```
+
+- Publish the connected theme once in Admin → **Online Store** → **Themes** → **Publish** for live traffic.
+- Develop on `feature/*` branches locally; only merge to `main` when ready to deploy.
+- Full guide: [docs/DEPLOY.md](docs/DEPLOY.md)
+
 ## Branches
 
 - `main` — stable release

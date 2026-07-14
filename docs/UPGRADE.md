@@ -68,7 +68,10 @@ git add -A
 git commit -m "Upgrade to Horizon 4.2.0 with Dkhoun customizations"
 git push -u origin upgrade/horizon-4.2.0
 gh pr create --base main --title "Upgrade Horizon to 4.2.0"
+# After PR merge → push to main auto-deploys via Shopify GitHub integration
 ```
+
+See [DEPLOY.md](./DEPLOY.md) for the production deploy workflow.
 
 After merge, tag the release:
 
