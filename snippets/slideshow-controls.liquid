@@ -407,10 +407,10 @@
   }
 
   .slideshow-controls__dots {
-    gap: 0.6rem;
+    gap: max(8px, var(--padding-xs));
     padding: var(--padding-sm) var(--padding-lg);
     border-radius: 3rem;
-    overflow: hidden;
+    overflow: visible;
 
     button {
       --size: 0.56rem;
@@ -418,11 +418,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: calc(var(--size) * 2);
-      height: calc(var(--size) * 2);
-      margin: calc(var(--size) / -2);
+      width: 48px;
+      height: 48px;
+      min-width: 48px;
+      min-height: 48px;
+      margin: 0;
       font-size: 0;
-      border-radius: calc(var(--size));
+      border-radius: 50%;
 
       &::after {
         content: '';
