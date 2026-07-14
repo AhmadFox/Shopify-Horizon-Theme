@@ -270,7 +270,7 @@
                   "type": "_accordion-row",
                   "settings": {
                     "heading": "وصف المنتج",
-                    "open_by_default": true,
+                    "open_by_default": false,
                     "icon": "perfume",
                     "width": 28
                   },
@@ -363,7 +363,7 @@
         "content_width": "content-full-width",
         "desktop_media_position": "left",
         "equal_columns": true,
-        "limit_details_width": true,
+        "limit_details_width": false,
         "gap": 48,
         "enable_sticky_add_to_cart": true,
         "background_color": "{{ settings.color_palette.color9 }}",
