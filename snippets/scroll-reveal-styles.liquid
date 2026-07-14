@@ -1,0 +1,59 @@
+{%- doc -%}
+  Scroll-reveal animation styles (Dawn-inspired). Loaded only when
+  settings.animations_reveal_on_scroll is enabled.
+
+  @example
+  {% render 'scroll-reveal-styles' %}
+{%- enddoc -%}
+
+{% stylesheet %}
+  @media (prefers-reduced-motion: no-preference) {
+    :root:not(.scroll-reveal--disabled) .scroll-trigger.animate--fade-in,
+    :root:not(.scroll-reveal--disabled) .scroll-trigger.animate--slide-in {
+      opacity: 0.01;
+    }
+
+    :root:not(.scroll-reveal--disabled) .scroll-trigger.animate--slide-in {
+      transform: translateY(2rem);
+    }
+
+    :root:not(.scroll-reveal--disabled) .scroll-trigger:not(.scroll-trigger--offscreen).animate--fade-in {
+      opacity: 1;
+      animation: scroll-reveal-fade-in var(--scroll-reveal-duration, 400ms) ease both;
+    }
+
+    :root:not(.scroll-reveal--disabled) .scroll-trigger:not(.scroll-trigger--offscreen).animate--slide-in {
+      animation: scroll-reveal-slide-in var(--scroll-reveal-duration, 400ms) ease both;
+      animation-delay: calc(var(--animation-order, 0) * 75ms);
+    }
+
+    :root:not(.scroll-reveal--disabled) .scroll-trigger.scroll-trigger--design-mode.animate--fade-in,
+    :root:not(.scroll-reveal--disabled) .scroll-trigger.scroll-trigger--design-mode.animate--slide-in {
+      opacity: 1;
+      animation: none;
+      transform: none;
+    }
+  }
+
+  @keyframes scroll-reveal-fade-in {
+    from {
+      opacity: 0.01;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes scroll-reveal-slide-in {
+    from {
+      opacity: 0.01;
+      transform: translateY(2rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+{% endstylesheet %}
