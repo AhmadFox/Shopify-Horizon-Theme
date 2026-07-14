@@ -65,13 +65,10 @@
       {%- liquid
         assign loading = 'lazy'
         assign image_preload = false
-
-        if block_index == 0 and section_index <= 3
-          assign loading = 'eager'
-        endif
-
         assign fetchpriority = 'auto'
+
         if block_index == 0 and section_index == 1
+          assign loading = 'eager'
           assign fetchpriority = 'high'
           assign image_preload = true
         endif
