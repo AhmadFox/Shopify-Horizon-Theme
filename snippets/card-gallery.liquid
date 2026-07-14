@@ -12,6 +12,13 @@
   assign product = closest.product
   assign block_settings = block.settings
   assign image_sizes = '(min-width: 750px) 50vw, 100vw'
+  assign card_lazy_load = closest.lazy_load_images
+
+  if card_lazy_load == 'true' or card_lazy_load == true
+    assign card_lazy_load = true
+  else
+    assign card_lazy_load = false
+  endif
 
   # Check if product has badges and determine position
   assign has_badges = false
@@ -134,7 +141,7 @@
             continue
           endif
 
-          if forloop.first and section.index == null or section.index < 5
+          if forloop.first and card_lazy_load == false
             assign loading = 'eager'
             assign sizes = image_sizes
           endif

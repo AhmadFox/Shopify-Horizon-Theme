@@ -55,6 +55,11 @@
       {% paginate collection.products by products_per_page %}
         {% capture children %}
           {% for product in collection.products %}
+            {% liquid
+              capture lazy_load_flag
+                render 'util-product-card-lazy-load', index: forloop.index, section: section, page: paginate.current_page, output: 'lazy_load'
+              endcapture
+            %}
             <li
               id="{{ section.id }}-{{ product.id }}"
               class="product-grid__item product-grid__item--{{ forloop.index0 }} {% render 'scroll-reveal-item', output: 'class' %}"
@@ -67,6 +72,7 @@
                 type: '_product-card',
                 id: 'product-card',
                 closest.product: product,
+                closest.lazy_load_images: lazy_load_flag,
                 product_view_context: 'collection'
               %}
             </li>

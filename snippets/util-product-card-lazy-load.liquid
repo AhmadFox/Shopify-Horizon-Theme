@@ -1,0 +1,69 @@
+{%- doc -%}
+  Dawn-style progressive lazy load threshold for product card images in grids and lists.
+
+  @param {number} index - 1-based card position in the list or grid
+  @param {object} section - Parent section with layout settings
+  @param {object} [block] - Parent block when rendering inside product-recommendations block
+  @param {number} [page] - Current paginate page (default 1)
+  @param {string} output - Pass 'lazy_load' to output true or false only
+{%- enddoc -%}
+
+{% liquid
+  assign lazy_load = false
+  assign page_num = page | default: 1 | plus: 0
+  assign item_index = index | plus: 0
+
+  if page_num > 1
+    assign lazy_load = true
+  else
+    assign settings_source = section.settings
+    if block != blank
+      assign settings_source = block.settings
+    endif
+
+    assign mobile_cols = 2
+    assign desktop_cols = 4
+
+    if settings_source.mobile_columns != blank
+      assign mobile_cols = settings_source.mobile_columns | plus: 0
+    elsif section.settings.mobile_product_card_size == 'large'
+      assign mobile_cols = 1
+    endif
+
+    if settings_source.columns != blank
+      assign desktop_cols = settings_source.columns | plus: 0
+    elsif section.settings.product_card_size != blank
+      case section.settings.product_card_size
+        when 'small'
+          assign desktop_cols = 5
+        when 'medium'
+          assign desktop_cols = 4
+        when 'large'
+          assign desktop_cols = 3
+        when 'extra-large'
+          assign desktop_cols = 2
+      endcase
+    endif
+
+    assign layout_type = settings_source.layout_type | default: section.settings.layout_type
+
+    if layout_type == 'carousel'
+      assign max_visible = 1
+    elsif layout_type == 'editorial'
+      assign max_visible = 2
+    else
+      assign max_visible = mobile_cols
+      if desktop_cols > max_visible
+        assign max_visible = desktop_cols
+      endif
+    endif
+
+    if item_index > max_visible
+      assign lazy_load = true
+    endif
+  endif
+%}
+
+{%- if output == 'lazy_load' -%}
+  {{- lazy_load -}}
+{%- endif -%}

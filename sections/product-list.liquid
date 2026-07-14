@@ -33,6 +33,11 @@
     {% if section.settings.collection != blank and shop.products_count != 0 %}
       {% paginate section.settings.collection.products by max_items %}
         {% for product in section.settings.collection.products limit: max_items %}
+        {% liquid
+          capture lazy_load_flag
+            render 'util-product-card-lazy-load', index: forloop.index, section: section, output: 'lazy_load'
+          endcapture
+        %}
         <div
           class="resource-list__item {% render 'scroll-reveal-item', output: 'class' %}"
           style="{% render 'scroll-reveal-item', output: 'style', index: forloop.index %}"
@@ -41,6 +46,7 @@
               type: '_product-card',
               id: 'static-product-card',
               closest.product: product,
+              closest.lazy_load_images: lazy_load_flag,
               product_view_context: 'collection'
             %}
           </div>
