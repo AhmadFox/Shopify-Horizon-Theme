@@ -45,6 +45,17 @@
 
 {% render 'product-badges-styles' %}
 
+{% stylesheet %}
+  /* Hidden by default; only shown in collection/search zoom-out grid view */
+  .product-grid-view-zoom-out--details {
+    display: none;
+  }
+
+  [product-grid-view='zoom-out'] .product-grid-view-zoom-out--details {
+    display: block;
+  }
+{% endstylesheet %}
+
 {% schema %}
 {
   "name": "t:names.product_image",

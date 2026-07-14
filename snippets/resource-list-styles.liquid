@@ -89,4 +89,13 @@
     display: grid;
     height: 100%;
   }
+
+  /* Zoom-out title is collection-only; hide on resource-list product cards (homepage, etc.) */
+  .product-grid-view-zoom-out--details {
+    display: none;
+  }
+
+  [product-grid-view='zoom-out'] .product-grid-view-zoom-out--details {
+    display: block;
+  }
 {% endstylesheet %}
