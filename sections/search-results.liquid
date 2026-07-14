@@ -60,6 +60,7 @@
             capture lazy_load_flag
               render 'util-product-card-lazy-load', index: forloop.index, section: section, page: paginate.current_page, output: 'lazy_load'
             endcapture
+            assign product_card_lazy_load = lazy_load_flag | strip
           %}
           <li
             id="{{ section.id }}-{{ product.id }}"
@@ -73,7 +74,6 @@
               type: '_product-card',
               id: 'product-card',
               closest.product: product,
-              closest.lazy_load_images: lazy_load_flag,
               product_view_context: 'search'
             %}
           </li>

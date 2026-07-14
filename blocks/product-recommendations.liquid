@@ -98,6 +98,7 @@
             capture lazy_load_flag
               render 'util-product-card-lazy-load', index: forloop.index, section: section, block: block, output: 'lazy_load'
             endcapture
+            assign product_card_lazy_load = lazy_load_flag | strip
           %}
           <div
             class="resource-list__item {% render 'scroll-reveal-item', output: 'class' %}"
@@ -106,8 +107,7 @@
             {% content_for 'block',
               type: '_product-card',
               id: 'static-product-card',
-              closest.product: product,
-              closest.lazy_load_images: lazy_load_flag
+              closest.product: product
             %}
           </div>
           {% if block_settings.layout_type == 'carousel' or block_settings.carousel_on_mobile %}

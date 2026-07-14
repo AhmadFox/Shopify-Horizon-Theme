@@ -4,6 +4,8 @@
   Note: When the product card itself is in a carousel layout, the card-gallery's carousel is disabled with JavaScript.
 
   @param [children] - Additional content rendered below the card gallery
+  Progressive lazy load: parent loops set `product_card_lazy_load` (true/false) before rendering each product card.
+  @param [lazy_load_images] - Optional explicit override when rendering card-gallery directly
   @param [section] - The section object the snippet is rendered in
   @param [block] - The block object the snippet is rendered in
 {%- enddoc -%}
@@ -12,9 +14,15 @@
   assign product = closest.product
   assign block_settings = block.settings
   assign image_sizes = '(min-width: 750px) 50vw, 100vw'
-  assign card_lazy_load = closest.lazy_load_images
+  assign card_lazy_load = product_card_lazy_load
 
-  if card_lazy_load == 'true' or card_lazy_load == true
+  if card_lazy_load == blank
+    assign card_lazy_load = lazy_load_images
+  endif
+
+  if card_lazy_load == blank
+    assign card_lazy_load = false
+  elsif card_lazy_load == 'true' or card_lazy_load == true
     assign card_lazy_load = true
   else
     assign card_lazy_load = false
