@@ -47,7 +47,7 @@ Regenerate this report anytime:
 
 These files differ from vanilla Horizon 4.1.1, mostly for **RTL layout**, **performance**, and **broad theme tuning**. The largest edits are typically:
 
-- `assets/base.css` — RTL mirroring, account dialog, empty cart styles
+- `assets/base.css` — RTL mirroring, account dialog, empty cart styles; Phase 2 Lighthouse splits (product grid → `snippets/product-grid-styles.liquid`)
 - `sections/header.liquid` — header / mega menu RTL
 - `snippets/header-actions.liquid`, `snippets/localization-form.liquid` — mirrored UI
 - Many `blocks/`, `sections/`, and `templates/*.json` — structural or JSON template changes

@@ -155,6 +155,17 @@
   /*
    * Slideshow Slide
    */
+  slideshow-slides > slideshow-slide {
+    min-height: var(--slide-min-height);
+    align-self: stretch;
+  }
+
+  @media screen and (min-width: 750px) {
+    slideshow-slides > slideshow-slide {
+      min-height: var(--slide-min-height-desktop);
+    }
+  }
+
   slideshow-slide {
     position: relative;
     scroll-snap-align: center;
@@ -164,7 +175,7 @@
     view-timeline-name: var(--slideshow-timeline);
     view-timeline-axis: inline;
     content-visibility: auto;
-    contain-intrinsic-size: auto none;
+    contain-intrinsic-size: auto var(--slide-min-height, 17.5rem);
     border-radius: var(--corner-radius, 0);
     overflow: hidden;
 
@@ -184,6 +195,10 @@
     /* Make inactive slides appear clickable */
     &[aria-hidden='true'] {
       cursor: pointer;
+    }
+
+    @media screen and (min-width: 750px) {
+      contain-intrinsic-size: auto var(--slide-min-height-desktop, 26.25rem);
     }
   }
 

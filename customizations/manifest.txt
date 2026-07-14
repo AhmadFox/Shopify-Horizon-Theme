@@ -9,6 +9,9 @@ snippets/account-menu-styles.liquid
 snippets/account-menu-translations.liquid
 snippets/cart-tax-note.liquid
 snippets/empty-cart-heading.liquid
+snippets/scroll-reveal-styles.liquid
+snippets/product-grid-styles.liquid
+assets/scroll-reveal.js
 
 # Tier 2 — Feature hooks (copy from main, then re-test after each upgrade)
 layout/theme.liquid

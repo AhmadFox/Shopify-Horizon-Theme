@@ -37,6 +37,10 @@
     {%- render 'stylesheets' -%}
     {%- render 'fonts' -%}
     {%- render 'scripts' -%}
+    {%- if settings.animations_reveal_on_scroll -%}
+      {%- render 'scroll-reveal-styles' -%}
+      <script src="{{ 'scroll-reveal.js' | asset_url }}" defer></script>
+    {%- endif -%}
     {%- render 'theme-styles-variables' -%}
     {%- render 'color-palette' -%}
 

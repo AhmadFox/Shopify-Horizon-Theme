@@ -387,6 +387,10 @@
           {%- capture attributes -%}on:click="#zoom-dialog-{{ block_id }}/open/{{ forloop.index0 }}"{% if settings.transition_to_main_product and forloop.first %} data-view-transition-type="product-image-transition"{% endif %}{% endcapture -%}
         {% endif %}
 
+        {% liquid
+          assign slide_panel_id = 'slideshow-panel-' | append: block_id | append: '-' | append: forloop.index0
+          assign slide_tab_id = 'slideshow-tab-' | append: block_id | append: '-' | append: forloop.index0
+        %}
         {% render 'slideshow-slide',
           index: forloop.index0,
           children: children,
@@ -394,6 +398,9 @@
           style: style,
           attributes: attributes,
           media_fit: block_settings.media_fit,
+          slide_id: media.id,
+          panel_id: slide_panel_id,
+          tab_id: slide_tab_id
         %}
       {% endfor %}
     {% endcapture %}
@@ -409,7 +416,8 @@
             controls_on_media: controls_on_media,
             pagination_position: pagination_position,
             aspect_ratio: block_settings.aspect_ratio,
-            thumbnail_radius: block_settings.thumbnail_radius
+            thumbnail_radius: block_settings.thumbnail_radius,
+            id_prefix: block_id
           -%}
         {% endif %}
 
@@ -422,7 +430,8 @@
             controls_on_media: mobile_controls_on_media,
             pagination_position: 'center',
             aspect_ratio: block_settings.aspect_ratio,
-            thumbnail_radius: block_settings.thumbnail_radius
+            thumbnail_radius: block_settings.thumbnail_radius,
+            id_prefix: block_id
           -%}
         {% endif %}
       {% endcapture %}
