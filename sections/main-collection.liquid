@@ -57,7 +57,8 @@
           {% for product in collection.products %}
             <li
               id="{{ section.id }}-{{ product.id }}"
-              class="product-grid__item product-grid__item--{{ forloop.index0 }}"
+              class="product-grid__item product-grid__item--{{ forloop.index0 }} {% render 'scroll-reveal-item', output: 'class' %}"
+              style="{% render 'scroll-reveal-item', output: 'style', index: forloop.index %}"
               data-page="{{ paginate.current_page }}"
               data-product-id="{{ product.id }}"
               ref="cards[]"

@@ -12,9 +12,6 @@ function onIntersection(entries, observer) {
     if (entry.isIntersecting) {
       if (target.classList.contains(OFFSCREEN_CLASS)) {
         target.classList.remove(OFFSCREEN_CLASS);
-        if (target.hasAttribute('data-cascade')) {
-          target.style.setProperty('--animation-order', String(index));
-        }
       }
       observer.unobserve(target);
     } else {

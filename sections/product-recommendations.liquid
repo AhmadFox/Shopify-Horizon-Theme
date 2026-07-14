@@ -94,7 +94,10 @@
       %}
       {% capture list_items %}
         {% for product in products limit: section.settings.max_products %}
-          <div class="resource-list__item">
+          <div
+            class="resource-list__item {% render 'scroll-reveal-item', output: 'class' %}"
+            style="{% render 'scroll-reveal-item', output: 'style', index: forloop.index %}"
+          >
             {% content_for 'block',
               type: '_product-card',
               id: 'static-product-card',

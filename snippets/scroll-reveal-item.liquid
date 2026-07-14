@@ -1,0 +1,14 @@
+{%- doc -%}
+  Scroll-reveal class and cascade delay for grid/list items (Dawn-inspired).
+
+  @param {number} [index] - 1-based stagger order (forloop.index)
+  @param {string} output - 'class' or 'style'
+{%- enddoc -%}
+
+{%- if settings.animations_reveal_on_scroll -%}
+  {%- if output == 'class' -%}
+    scroll-trigger animate--slide-in
+  {%- elsif output == 'style' and index != blank -%}
+    --animation-order: {{ index }};
+  {%- endif -%}
+{%- endif -%}
