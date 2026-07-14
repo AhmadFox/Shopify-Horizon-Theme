@@ -34,6 +34,8 @@
     assign fetch_priority = 'auto'
     if is_main_product_media
       assign fetch_priority = 'high'
+    elsif loading == 'lazy'
+      assign fetch_priority = 'low'
     endif
     assign focal_point_style = '--focal-point: ' | append: media.presentation.focal_point | append: ';'
     assign image_width = media.preview_image.width
