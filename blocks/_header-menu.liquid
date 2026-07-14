@@ -94,7 +94,7 @@
     {% capture children %}
       {% for link in block_settings.menu.links %}
         <li
-          role="presentation"
+          role="listitem"
           class="menu-list__list-item"
           on:focus="/activate"
           on:blur="/deactivate"
@@ -150,14 +150,14 @@
       {% endfor %}
       <li
         class="menu-list__list-item"
-        role="presentation"
+        role="listitem"
         slot="more"
         on:focus="/activate"
         on:blur="/deactivate"
         on:pointerenter="/activate"
         on:pointerleave="/deactivate"
       >
-        <button role="listitem" class="menu-list__link button-unstyled">
+        <button class="menu-list__link button-unstyled">
           <span class="menu-list__link-title">{{ 'actions.more' | t }}</span>
         </button>
       </li>
@@ -553,6 +553,7 @@
     flex-direction: column;
     padding-inline: 0;
     padding-block: var(--padding-sm) 0;
+    overflow: hidden;
   }
 
   .mega-menu__link-image {
@@ -562,6 +563,28 @@
     margin-bottom: var(--padding-sm);
     object-fit: cover;
     border-radius: var(--menu-image-border-radius);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .menu-list__list-item > .menu-list__submenu .mega-menu__link-image,
+    .menu-list__list-item > .menu-list__submenu .mega-menu__content-list-item {
+      opacity: 0.01;
+      transform: scale(1.05) translateY(0.75rem);
+      transition:
+        transform calc(var(--submenu-animation-speed) * 0.75) var(--ease-out-cubic),
+        opacity calc(var(--submenu-animation-speed) * 0.6) var(--animation-easing);
+      transition-delay: calc((var(--mega-menu-animation-order, 1) - 1) * 60ms + var(--submenu-animation-speed) * 0.12);
+    }
+
+    .menu-list__list-item:has([aria-expanded='true']) > .menu-list__submenu .mega-menu__link-image,
+    .overflow-menu:has([slot='overflow'] [aria-expanded='true']) .mega-menu__link-image,
+    .menu-list__submenu:is(:hover) .mega-menu__link-image,
+    .menu-list__list-item:has([aria-expanded='true']) > .menu-list__submenu .mega-menu__content-list-item,
+    .overflow-menu:has([slot='overflow'] [aria-expanded='true']) .mega-menu__content-list-item,
+    .menu-list__submenu:is(:hover) .mega-menu__content-list-item {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   /* Fix alignment for collection image mode links without images */

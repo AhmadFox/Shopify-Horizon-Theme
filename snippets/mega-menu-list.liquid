@@ -103,7 +103,7 @@
           # For all other modes, column span is determined by the number of links in the parent link
           assign span_class = 'mega-menu__column--span-' | append: column_span
         endif
-        echo '<li class="mega-menu__column ' | append: span_class | append: '">'
+        echo '<li class="mega-menu__column ' | append: span_class | append: '" style="--mega-menu-animation-order: ' | append: forloop.index | append: ';">'
       endif
     %}
     <div>
@@ -289,7 +289,7 @@
         {% if eager_loading %}
           {% paginate collection_object.products by max_featured_products %}
             {% for item in collection_object.products %}
-              <li class="mega-menu__content-list-item {% if forloop.index > max_featured_products_tablet %} mega-menu__content-list-item--hidden-tablet{% endif %}">
+              <li class="mega-menu__content-list-item {% if forloop.index > max_featured_products_tablet %} mega-menu__content-list-item--hidden-tablet{% endif %}" style="--mega-menu-animation-order: {{ forloop.index }};">
                 {% render 'resource-card',
                   resource: item,
                   resource_type: 'product',
@@ -331,7 +331,7 @@
           {% else %}
             {% assign collection_object = collections[handle] %}
           {% endif %}
-          <li class="mega-menu__content-list-item{% if forloop.index > max_featured_collections_tablet %} mega-menu__content-list-item--hidden-tablet{% endif %}">
+          <li class="mega-menu__content-list-item{% if forloop.index > max_featured_collections_tablet %} mega-menu__content-list-item--hidden-tablet{% endif %}" style="--mega-menu-animation-order: {{ forloop.index }};">
             {% render 'resource-card',
               resource: collection_object,
               resource_type: 'collection',
