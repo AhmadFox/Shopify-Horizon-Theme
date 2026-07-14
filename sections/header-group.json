@@ -1,0 +1,151 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "header_announcements_ewN8Qr": {
+      "type": "header-announcements",
+      "blocks": {
+        "announcement_HFqHT4": {
+          "type": "_announcement",
+          "name": "t:names.announcement",
+          "settings": {
+            "text": "🚚 شحن مجاني داخل السعودية عند وصول مشترياتك لـ 399.00 ريال عند اختيار الدفع المسبق",
+            "link": "",
+            "font": "var(--font-accent--family)",
+            "font_size": "0.75rem",
+            "weight": "500",
+            "letter_spacing": "loose",
+            "case": "none",
+            "text_color": "{{ settings.color_palette.color3 }}"
+          },
+          "blocks": {}
+        },
+        "announcement_FBmJYy": {
+          "type": "_announcement",
+          "name": "t:names.announcement",
+          "settings": {
+            "text": "🎁 هدية مجانية \"مبثوث ترافل\" عند وصول مشترياتك 199.00 ريال سعودي 🎁",
+            "link": "shopify://collections/الاكثر-مبيعا",
+            "font": "var(--font-accent--family)",
+            "font_size": "0.75rem",
+            "weight": "500",
+            "letter_spacing": "loose",
+            "case": "none",
+            "text_color": "{{ settings.color_palette.color3 }}"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "announcement_HFqHT4",
+        "announcement_FBmJYy"
+      ],
+      "name": "t:names.announcement_bar",
+      "settings": {
+        "speed": 5,
+        "section_width": "full-width",
+        "background_color": "{{ settings.color_palette.color1 }}",
+        "divider_width": 0,
+        "divider_color": "",
+        "padding-block-start": 13,
+        "padding-block-end": 13
+      }
+    },
+    "header_section": {
+      "type": "header",
+      "blocks": {
+        "header-logo": {
+          "type": "_header-logo",
+          "static": true,
+          "settings": {
+            "hide_logo_on_home_page": false,
+            "padding-block-start": 6,
+            "padding-block-end": 6
+          },
+          "blocks": {}
+        },
+        "header-menu": {
+          "type": "_header-menu",
+          "static": true,
+          "settings": {
+            "menu": "main-menu",
+            "background_color": "{{ settings.color_palette.color9 }}",
+            "text_color": "{{ settings.color_palette.color1 }}",
+            "type_font_primary_size": "0.875rem",
+            "menu_font_style": "regular",
+            "type_font_primary_link": "subheading",
+            "type_case_primary_link": "uppercase",
+            "menu_style": "collection_images",
+            "featured_products_aspect_ratio": "1 / 1",
+            "featured_collections_aspect_ratio": "1 / 1",
+            "image_border_radius": 0,
+            "navigation_bar": false,
+            "background_color_navigation_bar": "{{ settings.color_palette.background }}",
+            "text_color_navigation_bar": "",
+            "drawer_accordion": true,
+            "drawer_accordion_expand_first": true,
+            "drawer_dividers": false
+          },
+          "blocks": {}
+        }
+      },
+      "settings": {
+        "logo_position": "center",
+        "menu_position": "center",
+        "menu_row": "bottom",
+        "customer_account_menu": "customer-account-main-menu",
+        "show_search": true,
+        "search_position": "left",
+        "search_row": "top",
+        "show_country": true,
+        "country_selector_style": true,
+        "show_language": true,
+        "localization_font": "accent",
+        "localization_font_size": "0.875rem",
+        "localization_position": "left",
+        "localization_row": "top",
+        "section_width": "page-width",
+        "section_height": "standard",
+        "enable_sticky_header": "always",
+        "divider_width": 0.5,
+        "divider_size": "full-width",
+        "divider_color": "{{ settings.color_palette.color3 }}",
+        "border_width": 0.5,
+        "bottom_border_color": "{{ settings.color_palette.color3 }}",
+        "actions_display_style": "icon",
+        "actions_font_size": "0.875rem",
+        "actions_font": "body",
+        "actions_text_case": "none",
+        "background_color_top": "{{ settings.color_palette.color9 }}",
+        "text_color_top": "{{ settings.color_palette.foreground }}",
+        "background_color_bottom": "{{ settings.color_palette.color13 }}",
+        "text_color_bottom": "{{ settings.color_palette.foreground }}",
+        "bubble_style": "custom",
+        "bubble_background_color": "{{ settings.color_palette.color2 }}",
+        "bubble_text_color": "{{ settings.color_palette.background }}",
+        "enable_transparent_header_home": false,
+        "home_inverse_logo": false,
+        "text_color_transparent_home": "",
+        "enable_transparent_header_product": false,
+        "product_inverse_logo": false,
+        "text_color_transparent_product": "",
+        "enable_transparent_header_collection": false,
+        "collection_inverse_logo": false,
+        "text_color_transparent_collection": ""
+      }
+    }
+  },
+  "order": [
+    "header_announcements_ewN8Qr",
+    "header_section"
+  ]
+}

@@ -1,0 +1,71 @@
+{% doc %}
+  Patches Shopify account component translations from theme locale files.
+
+  Shopify injects #shopify-customer-account-data at the end of <head>, after
+  theme scripts. This snippet runs at the start of <body> (head complete) and
+  watches for late injection via MutationObserver.
+{% enddoc %}
+
+{%- if shop.customer_accounts_enabled -%}
+  <script>
+    (function () {
+      const overrides = {
+        'account_menu.signed_out_state.sheet_title': {{ 'account_menu.signed_out_state.sheet_title' | t | json }},
+        'account_menu.signed_out_state.section_divider': {{ 'account_menu.signed_out_state.section_divider' | t | json }},
+        'account_menu.signed_out_state.alternate_divider': {{ 'account_menu.signed_out_state.alternate_divider' | t | json }},
+        'account_menu.signed_out_state.email_field_label': {{ 'account_menu.signed_out_state.email_field_label' | t | json }},
+        'account_menu.signed_out_state.orders_button': {{ 'account_menu.signed_out_state.orders_button' | t | json }},
+        'account_menu.signed_out_state.profile_button': {{ 'account_menu.signed_out_state.profile_button' | t | json }},
+        'account_menu.signed_out_state.shop_login_button': {{ 'account_menu.signed_out_state.shop_login_button' | t | json }},
+        'account_menu.signed_out_state.continue_with_google': {{ 'account_menu.signed_out_state.continue_with_google' | t | json }},
+        'account_menu.signed_out_state.continue_with_facebook': {{ 'account_menu.signed_out_state.continue_with_facebook' | t | json }},
+        'account_menu.signed_out_state.marketing_consent_label': {{ 'account_menu.signed_out_state.marketing_consent_label' | t | json }},
+        'account_menu.signed_out_state.use_email_button': {{ 'account_menu.signed_out_state.use_email_button' | t | json }},
+        'account_menu.signed_in_state.greeting_with_name': {{ 'account_menu.signed_in_state.greeting_with_name' | t | json }},
+        'account_menu.signed_in_state.greeting_without_name': {{ 'account_menu.signed_in_state.greeting_without_name' | t | json }},
+        'account_menu.signed_in_state.orders_button': {{ 'account_menu.signed_in_state.orders_button' | t | json }},
+        'account_menu.signed_in_state.profile_button': {{ 'account_menu.signed_in_state.profile_button' | t | json }},
+        'account_menu.location_picker.sheet_title': {{ 'account_menu.location_picker.sheet_title' | t | json }},
+        'account_menu.location_picker.search_field_placeholder': {{ 'account_menu.location_picker.search_field_placeholder' | t | json }},
+        'account_menu.aria_labels.close_menu': {{ 'account_menu.aria_labels.close_menu' | t | json }},
+        'account_menu.aria_labels.back_to_main_menu': {{ 'account_menu.aria_labels.back_to_main_menu' | t | json }},
+        'account_menu.aria_labels.open_submenu': {{ 'account_menu.aria_labels.open_submenu' | t | json }},
+        'account_menu.aria_labels.loading_menu': {{ 'account_menu.aria_labels.loading_menu' | t | json }},
+        'account_menu.aria_labels.account': {{ 'account_menu.aria_labels.account' | t | json }},
+        'account_menu.aria_labels.sign_in_with_email': {{ 'account_menu.aria_labels.sign_in_with_email' | t | json }},
+        'account_menu.aria_labels.sign_in': {{ 'account_menu.aria_labels.sign_in' | t | json }}
+      };
+
+      function patchAccountTranslations() {
+        const dataEl = document.getElementById('shopify-customer-account-data');
+        if (!dataEl || dataEl.dataset.accountTranslationsPatched === 'true') return;
+
+        try {
+          const data = JSON.parse(dataEl.textContent);
+          const translations = data?.shop?.customerAccountTranslations;
+          if (!Array.isArray(translations)) return;
+
+          data.shop.customerAccountTranslations = translations.map((entry) => {
+            const override = overrides[entry.key];
+            if (!override || override.startsWith('Translation missing:')) return entry;
+            return { key: entry.key, value: override };
+          });
+
+          dataEl.textContent = JSON.stringify(data);
+          dataEl.dataset.accountTranslationsPatched = 'true';
+        } catch (error) {
+          console.warn('[account-menu-translations] Failed to patch account translations.', error);
+        }
+      }
+
+      patchAccountTranslations();
+
+      if (!document.getElementById('shopify-customer-account-data')) {
+        new MutationObserver(() => patchAccountTranslations()).observe(document.documentElement, {
+          childList: true,
+          subtree: true
+        });
+      }
+    })();
+  </script>
+{%- endif -%}

@@ -1,0 +1,62 @@
+{% doc %}
+  Renders the empty cart title and message for the cart page and cart drawer.
+
+  Theme settings override locale translations for English and Arabic.
+  Other languages use locale files only.
+
+  @param {string} [heading_tag] - Heading element tag. Defaults to h2.
+  @param {string} [heading_class] - CSS classes for the heading element.
+  @param {string} [heading_id] - Optional id attribute for the heading element.
+{% enddoc %}
+
+{%- liquid
+  assign locale_code = request.locale.iso_code | downcase
+  assign heading_tag = heading_tag | default: 'h2'
+  assign heading_class = heading_class | default: ''
+
+  if locale_code == 'ar'
+    if settings.empty_cart_title_ar != blank
+      assign empty_cart_title = settings.empty_cart_title_ar
+    else
+      assign empty_cart_title = 'content.your_cart_is_empty' | t
+    endif
+
+    if settings.empty_cart_message_ar != blank
+      assign empty_cart_message = settings.empty_cart_message_ar
+    else
+      assign empty_cart_message = 'content.empty_cart_message' | t
+    endif
+  elsif locale_code == 'en'
+    if settings.empty_cart_title_en != blank
+      assign empty_cart_title = settings.empty_cart_title_en
+    else
+      assign empty_cart_title = 'content.your_cart_is_empty' | t
+    endif
+
+    if settings.empty_cart_message_en != blank
+      assign empty_cart_message = settings.empty_cart_message_en
+    else
+      assign empty_cart_message = 'content.empty_cart_message' | t
+    endif
+  else
+    assign empty_cart_title = 'content.your_cart_is_empty' | t
+    assign empty_cart_message = 'content.empty_cart_message' | t
+  endif
+-%}
+
+<{{ heading_tag }}
+  {% if heading_class != blank %}
+    class="{{ heading_class }}"
+  {% endif %}
+  {% if heading_id != blank %}
+    id="{{ heading_id }}"
+  {% endif %}
+>
+  {{- empty_cart_title -}}
+</{{ heading_tag }}>
+
+{%- if empty_cart_message != blank -%}
+  <p class="empty-cart__message">
+    {{- empty_cart_message -}}
+  </p>
+{%- endif -%}

@@ -1,0 +1,25 @@
+{% doc %}
+  Renders the cart tax and shipping note for the cart page and cart drawer.
+
+  Theme settings can override locale translations for English and Arabic.
+  When no custom text is set, falls back to automatic tax/shipping copy.
+{% enddoc %}
+
+{%- liquid
+  assign locale_code = request.locale.iso_code | downcase
+  assign custom_tax_note = blank
+
+  if locale_code == 'ar' and settings.cart_tax_note_ar != blank
+    assign custom_tax_note = settings.cart_tax_note_ar
+  elsif locale_code == 'en' and settings.cart_tax_note_en != blank
+    assign custom_tax_note = settings.cart_tax_note_en
+  endif
+-%}
+
+<small>
+  {%- if custom_tax_note != blank -%}
+    {{- custom_tax_note -}}
+  {%- else -%}
+    {% render 'tax-info', has_discounts_enabled: has_discounts_enabled %}
+  {%- endif -%}
+</small>

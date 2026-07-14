@@ -1,0 +1,74 @@
+{% doc %}
+  Injects layout styles into the shopify-account shadow root so Orders and
+  Profile menu buttons render as equal-width columns.
+{% enddoc %}
+
+{%- if shop.customer_accounts_enabled -%}
+  <script>
+    (function () {
+      const styleText = `
+        nav.stack-inline {
+          display: grid !important;
+          grid-auto-flow: column;
+          grid-auto-columns: minmax(0, 1fr);
+          gap: var(--spacing-sm);
+          width: 100%;
+        }
+
+        nav.stack-inline > * {
+          flex-grow: unset !important;
+          width: 100%;
+          min-width: 0;
+        }
+
+        nav.stack-inline > .button,
+        nav.stack-inline > a.button {
+          justify-content: center;
+        }
+      `;
+
+      function injectAccountMenuStyles(shadowRoot) {
+        if (!shadowRoot || shadowRoot.getElementById('theme-account-menu-styles')) return;
+
+        const style = document.createElement('style');
+        style.id = 'theme-account-menu-styles';
+        style.textContent = styleText;
+        shadowRoot.appendChild(style);
+      }
+
+      function watchAccountMenuStyles(account) {
+        if (!account?.shadowRoot) return;
+
+        injectAccountMenuStyles(account.shadowRoot);
+
+        new MutationObserver(() => {
+          injectAccountMenuStyles(account.shadowRoot);
+        }).observe(account.shadowRoot, { childList: true, subtree: true });
+      }
+
+      function initAccountMenuStyles() {
+        const account = document.querySelector('shopify-account');
+        if (!account) return;
+
+        if (account.shadowRoot) {
+          watchAccountMenuStyles(account);
+          return;
+        }
+
+        const observer = new MutationObserver(() => {
+          if (!account.shadowRoot) return;
+          observer.disconnect();
+          watchAccountMenuStyles(account);
+        });
+
+        observer.observe(account, { childList: true });
+      }
+
+      if (customElements.get('shopify-account')) {
+        initAccountMenuStyles();
+      } else {
+        customElements.whenDefined('shopify-account').then(initAccountMenuStyles);
+      }
+    })();
+  </script>
+{%- endif -%}
