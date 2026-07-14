@@ -1,11 +1,4 @@
 
-
-<script
-  src="{{ 'results-list.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-
 {% javascript %}
   const url = new URL(window.location.href);
   if (url.hash) {
@@ -39,6 +32,7 @@
     style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
     section-id="{{ section.id }}"
     infinite-scroll="{{ section.settings.enable_infinite_scroll }}"
+    data-lazy-section-modules="paginated-list product-cards"
   >
     {% render 'skip-to-content-link', href: '#ResultsList', text: 'accessibility.skip_to_results_list' %}
 
