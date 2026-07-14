@@ -1,0 +1,27 @@
+# Dkhoun customization manifest for Horizon upgrades.
+# Lines starting with # are comments. Blank lines are ignored.
+#
+# Tier 1 — New files (copy from main; low conflict risk)
+.gitignore
+config/markets.json
+locales/ar.json
+snippets/account-menu-styles.liquid
+snippets/account-menu-translations.liquid
+snippets/cart-tax-note.liquid
+snippets/empty-cart-heading.liquid
+
+# Tier 2 — Feature hooks (copy from main, then re-test after each upgrade)
+layout/theme.liquid
+snippets/cart-summary.liquid
+snippets/cart-drawer.liquid
+blocks/_cart-title.liquid
+snippets/text.liquid
+config/settings_schema.json
+config/settings_data.json
+locales/en.default.json
+locales/en.default.schema.json
+sections/header-group.json
+
+# Tier 3 — RTL, performance, and broad Horizon edits (manual merge required)
+# Run: ./scripts/list-customizations.sh --tier3
+# Do not auto-copy these; review against upstream release notes.

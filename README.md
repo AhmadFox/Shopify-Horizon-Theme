@@ -39,6 +39,21 @@ shopify theme check
 
 - `main` — stable release
 - `feature/horizon-RTL-support` — RTL, localization, and performance work
+- `horizon-upstream/X.Y.Z` — read-only mirror of vanilla [Shopify Horizon](https://github.com/Shopify/horizon)
+
+## Upgrading Horizon
+
+This repo uses a **manifest-based upgrade workflow** (not a direct git fork). When Shopify ships Horizon 4.2.0 or later:
+
+```bash
+./scripts/upgrade-horizon.sh 4.2.0 main
+```
+
+Documentation:
+
+- [docs/UPGRADE.md](docs/UPGRADE.md) — step-by-step merge and release process
+- [docs/CUSTOMIZATIONS.md](docs/CUSTOMIZATIONS.md) — what Dkhoun changed vs vanilla Horizon
+- [customizations/manifest.txt](customizations/manifest.txt) — files auto-applied on upgrade
 
 ## License
 
