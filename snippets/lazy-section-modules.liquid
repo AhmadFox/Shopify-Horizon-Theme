@@ -1,0 +1,39 @@
+{%- doc -%}
+  Bootstraps IntersectionObserver-based lazy loading for below-fold section JS.
+  Render from scripts.liquid when product-card or paginated-list modules defer.
+
+  @param {boolean} [product_cards] - Load quick-add / product-card modules on demand
+  @param {boolean} [paginated_list] - Load results-list / paginated-list modules on demand
+
+  @example
+  {% render 'lazy-section-modules', product_cards: true, paginated_list: true %}
+{%- enddoc -%}
+
+<script
+  id="lazy-section-module-groups"
+  type="application/json"
+>
+  {
+    {%- if product_cards -%}
+    "product-cards": [
+      {{ 'quick-add.js' | asset_url | json }},
+      {{ 'product-card.js' | asset_url | json }},
+      {{ 'product-form.js' | asset_url | json }},
+      {{ 'fly-to-cart.js' | asset_url | json }},
+      {{ 'product-price.js' | asset_url | json }}
+    ]{%- if paginated_list -%},{%- endif -%}
+    {%- endif -%}
+    {%- if paginated_list -%}
+    "paginated-list": [
+      {{ 'paginated-list-aspect-ratio.js' | asset_url | json }},
+      {{ 'paginated-list.js' | asset_url | json }},
+      {{ 'results-list.js' | asset_url | json }}
+    ]
+    {%- endif -%}
+  }
+</script>
+<script
+  src="{{ 'lazy-section-modules.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>

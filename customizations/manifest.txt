@@ -11,7 +11,9 @@ snippets/cart-tax-note.liquid
 snippets/empty-cart-heading.liquid
 snippets/scroll-reveal-styles.liquid
 snippets/product-grid-styles.liquid
+snippets/lazy-section-modules.liquid
 assets/scroll-reveal.js
+assets/lazy-section-modules.js
 
 # Tier 2 — Feature hooks (copy from main, then re-test after each upgrade)
 layout/theme.liquid

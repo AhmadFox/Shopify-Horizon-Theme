@@ -9,21 +9,30 @@
   assign load_product_card_scripts = false
   assign load_collection_list_scripts = false
   assign load_slideshow_scripts = false
+  assign lazy_load_product_cards = false
+  assign lazy_load_paginated_list = false
 
   case template.name
     when 'product'
       assign load_product_detail_scripts = true
       assign load_product_card_scripts = true
     when 'collection', 'search'
-      assign load_product_card_scripts = true
-      assign load_collection_list_scripts = true
+      assign lazy_load_product_cards = true
+      assign lazy_load_paginated_list = true
     when 'index'
-      assign load_product_card_scripts = true
+      assign lazy_load_product_cards = true
       assign load_slideshow_scripts = true
     when 'cart'
       assign load_product_card_scripts = true
   endcase
 -%}
+
+{% if lazy_load_product_cards or lazy_load_paginated_list %}
+  {% render 'lazy-section-modules',
+    product_cards: lazy_load_product_cards,
+    paginated_list: lazy_load_paginated_list
+  %}
+{% endif %}
 
 <script type="importmap">
   {
