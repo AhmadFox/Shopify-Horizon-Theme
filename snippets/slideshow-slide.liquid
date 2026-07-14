@@ -9,6 +9,8 @@
   @param {boolean} [hidden] - Hidden slides will not be shown in the slideshow
   @param {string} [slide_size] - The size of the slide (small, medium, large)
   @param {string} [slide_id] - The unique id assigned to the slide amongst all slides in the slideshow
+  @param {string} [panel_id] - HTML id for tabpanel aria wiring
+  @param {string} [tab_id] - HTML id of the controlling tab for aria-labelledby
   @param {string} [media_fit] - { 'cover', 'contain' } - CSS property for how the media should be fit in the slide
   @param {boolean} [navigate_to_slide] - Whether the user can click to navigate to the slide
 
@@ -38,7 +40,14 @@
 
 <slideshow-slide
   ref="slides[]"
+  role="tabpanel"
   aria-hidden="{% if index == 0 %}false{% else %}true{% endif %}"
+  {% if panel_id != blank %}
+    id="{{ panel_id }}"
+  {% endif %}
+  {% if tab_id != blank %}
+    aria-labelledby="{{ tab_id }}"
+  {% endif %}
   style="--slideshow-timeline: --slide-{{ index }}; --product-media-fit: {{ media_fit | default: 'cover' }}; {{ grid_template_rows }} {{ grid_template_rows_desktop }}{% if style != blank %} {{ style }}{% endif %}"
   {% if class != blank %}
     class="{{ class }}"

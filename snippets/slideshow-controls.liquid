@@ -15,6 +15,7 @@
   @param {number} [thumbnail_radius] - The border radius for thumbnails in pixels
   @param {string} [class] - Additional classes to apply to the controls
   @param {boolean} [secondary] - Whether the controls are secondary
+  @param {string} [id_prefix] - Unique prefix for tab/panel id wiring (e.g. section.id)
 
   @example
   {%- render 'slideshow-controls', style: 'dots', item_count: 10 -%}
@@ -105,16 +106,41 @@
           ref="thumbnailsContainer"
           class="slideshow-controls__thumbnails-container"
         >
-          <div class="slideshow-controls__thumbnails">
+          <div
+            class="slideshow-controls__thumbnails"
+            role="tablist"
+            aria-label="{{ 'accessibility.slideshow' | t }}"
+          >
             {% for media in thumbnails %}
+              {% liquid
+                assign thumb_index = forloop.index0
+                assign tab_id = ''
+                assign panel_id = ''
+                if id_prefix != blank
+                  assign tab_id = 'slideshow-tab-' | append: id_prefix | append: '-' | append: thumb_index
+                  assign panel_id = 'slideshow-panel-' | append: id_prefix | append: '-' | append: thumb_index
+                elsif media.id != blank
+                  assign panel_id = 'slideshow-panel-' | append: media.id
+                  assign tab_id = 'slideshow-tab-' | append: media.id
+                endif
+              %}
               <button
                 class="slideshow-control button button-unstyled slideshow-controls__thumbnail"
+                role="tab"
                 aria-label="{{ 'accessibility.slide_status' | t: index: forloop.index, length: forloop.length }}"
                 on:click="/select/{{ forloop.index0 }}"
                 style="--aspect-ratio: {% if aspect_ratio == 'adapt' %}{{ media.preview_image.aspect_ratio | default: 1.0 }}{% else %}{{ aspect_ratio }}{% endif %};"
                 ref="thumbnails[]"
+                {% if tab_id != blank %}
+                  id="{{ tab_id }}"
+                {% endif %}
+                {% if panel_id != blank %}
+                  aria-controls="{{ panel_id }}"
+                {% endif %}
                 {% if forloop.first %}
                   aria-selected="true"
+                {% else %}
+                  aria-selected="false"
                 {% endif %}
               >
                 {% liquid
@@ -157,17 +183,39 @@
           <span ref="current">1</span><span class="slash">/</span>{{ item_count -}}
         </div>
       {% when 'dots' %}
-        <ol class="slideshow-controls__{{ style }}">
+        <ol
+          class="slideshow-controls__{{ style }}"
+          role="tablist"
+          aria-label="{{ 'accessibility.slideshow' | t }}"
+        >
           {% for i in (1..item_count) %}
-            <li>
+            {% liquid
+              assign dot_index = forloop.index0
+              assign tab_id = ''
+              assign panel_id = ''
+              if id_prefix != blank
+                assign tab_id = 'slideshow-tab-' | append: id_prefix | append: '-' | append: dot_index
+                assign panel_id = 'slideshow-panel-' | append: id_prefix | append: '-' | append: dot_index
+              endif
+            %}
+            <li role="presentation">
               <button
                 class="slideshow-control button button-unstyled"
+                role="tab"
                 style="animation-timeline: --slide-{{ forloop.index0 }}"
                 aria-label="{{ 'accessibility.slide_status' | t: index: forloop.index, length: forloop.length }}"
                 on:click="/select/{{ forloop.index0 }}"
                 ref="dots[]"
+                {% if tab_id != blank %}
+                  id="{{ tab_id }}"
+                {% endif %}
+                {% if panel_id != blank %}
+                  aria-controls="{{ panel_id }}"
+                {% endif %}
                 {% if forloop.first %}
                   aria-selected="true"
+                {% else %}
+                  aria-selected="false"
                 {% endif %}
               >
                 {{ forloop.index }}

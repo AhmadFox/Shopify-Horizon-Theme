@@ -152,6 +152,11 @@
   </div>
 {% endcapture %}
 
+{%- liquid
+  assign slide_panel_id = 'slideshow-panel-' | append: section.id | append: '-' | append: block_index
+  assign slide_tab_id = 'slideshow-tab-' | append: section.id | append: '-' | append: block_index
+-%}
+
 {% render 'slideshow-slide',
   index: block_index,
   class: class,
@@ -159,7 +164,9 @@
   attributes: block.shopify_attributes,
   slide_size: section.settings.slide_height,
   navigate_to_slide: true,
-  style: slide_aspect_style
+  style: slide_aspect_style,
+  panel_id: slide_panel_id,
+  tab_id: slide_tab_id
 %}
 
 {% stylesheet %}
