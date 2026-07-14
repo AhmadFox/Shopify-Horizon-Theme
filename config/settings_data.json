@@ -49,7 +49,7 @@
     "page_width": "narrow",
     "page_transition_enabled": true,
     "transition_to_main_product": true,
-    "card_hover_effect": "lift",
+    "card_hover_effect": "subtle-zoom",
     "badge_position": "top-left",
     "badge_corner_radius": 6,
     "badge_sale_background_color": "#e1edf5",
