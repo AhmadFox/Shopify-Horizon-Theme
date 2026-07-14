@@ -41,6 +41,24 @@
     border: var(--product-card-border-width) solid rgb(var(--color-border-rgb) / var(--product-card-border-opacity));
   }
 
+  /* Card gallery clip + image fit — must live here for collection/search CSS subset */
+  .card-gallery {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-gallery .product-media__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    object-fit: cover;
+  }
+
+  .card-hover-effect-subtle-zoom .product-card__content {
+    overflow: hidden;
+  }
+
   .product-grid--organic[product-grid-view='default'] .product-grid__item {
     height: fit-content;
   }
