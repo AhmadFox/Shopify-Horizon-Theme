@@ -4,6 +4,27 @@
   @param {object} [product] - The product object, available on product pages.
 {% enddoc %}
 
+{%- liquid
+  assign load_product_detail_scripts = false
+  assign load_product_card_scripts = false
+  assign load_collection_list_scripts = false
+  assign load_slideshow_scripts = false
+
+  case template.name
+    when 'product'
+      assign load_product_detail_scripts = true
+      assign load_product_card_scripts = true
+    when 'collection', 'search'
+      assign load_product_card_scripts = true
+      assign load_collection_list_scripts = true
+    when 'index'
+      assign load_product_card_scripts = true
+      assign load_slideshow_scripts = true
+    when 'cart'
+      assign load_product_card_scripts = true
+  endcase
+-%}
+
 <script type="importmap">
   {
     "imports": {
@@ -90,7 +111,7 @@
   fetchpriority="low"
 >
 
-{% if template.name == 'collection' or template.name == 'search' %}
+{% if load_collection_list_scripts %}
   <link
     rel="modulepreload"
     href="{{ 'paginated-list-aspect-ratio.js' | asset_url }}"
@@ -103,14 +124,16 @@
   >
 {% endif %}
 
+{% if load_product_card_scripts %}
+  <link
+    rel="modulepreload"
+    href="{{ 'recently-viewed-products.js' | asset_url }}"
+    fetchpriority="low"
+  >
+{% endif %}
 <link
   rel="modulepreload"
   href="{{ 'focus.js' | asset_url }}"
-  fetchpriority="low"
->
-<link
-  rel="modulepreload"
-  href="{{ 'recently-viewed-products.js' | asset_url }}"
   fetchpriority="low"
 >
 <link
@@ -133,11 +156,13 @@
   type="module"
   fetchpriority="low"
 ></script>
+{% if load_product_card_scripts %}
 <script
   src="{{ 'quick-add.js' | asset_url }}"
   type="module"
   fetchpriority="low"
 ></script>
+{% endif %}
 {% if settings.show_add_discount_code %}
   <script
     src="{{ 'cart-discount.js' | asset_url }}"
@@ -151,11 +176,14 @@
   type="module"
   fetchpriority="low"
 ></script>
+{% if load_product_detail_scripts %}
 <script
   src="{{ 'variant-picker.js' | asset_url }}"
   type="module"
   fetchpriority="low"
 ></script>
+{% endif %}
+{% if load_product_card_scripts %}
 <script
   src="{{ 'product-card.js' | asset_url }}"
   type="module"
@@ -171,11 +199,13 @@
   type="module"
   fetchpriority="low"
 ></script>
+{% endif %}
 <script
   src="{{ 'accordion-custom.js' | asset_url }}"
   type="module"
   fetchpriority="low"
 ></script>
+{% if load_product_detail_scripts %}
 <script
   src="{{ 'media.js' | asset_url }}"
   type="module"
@@ -202,42 +232,7 @@
   fetchpriority="low"
 ></script>
 <script
-  src="{{ 'slideshow.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'layered-slideshow.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'anchored-popover.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'floating-panel.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'video-background.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'component-quantity-selector.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
   src="{{ 'media-gallery.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
-  src="{{ 'rte-formatter.js' | asset_url }}"
   type="module"
   fetchpriority="low"
 ></script>
@@ -253,6 +248,50 @@
 ></script>
 <script
   src="{{ 'volume-pricing-info.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+{% elsif load_product_card_scripts %}
+<script
+  src="{{ 'product-price.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+{% endif %}
+{% if load_slideshow_scripts %}
+<script
+  src="{{ 'slideshow.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+<script
+  src="{{ 'layered-slideshow.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+<script
+  src="{{ 'video-background.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+{% endif %}
+<script
+  src="{{ 'anchored-popover.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+<script
+  src="{{ 'floating-panel.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+<script
+  src="{{ 'component-quantity-selector.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+<script
+  src="{{ 'rte-formatter.js' | asset_url }}"
   type="module"
   fetchpriority="low"
 ></script>
