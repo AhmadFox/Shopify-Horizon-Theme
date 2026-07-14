@@ -1,14 +1,30 @@
 
 
+{% liquid
+  assign content_reveal_class = ''
+  assign content_reveal_style = ''
+  assign group_class = 'media-with-content__content'
+  if settings.animations_reveal_on_scroll and section.index > 1
+    capture content_reveal_class
+      render 'scroll-reveal-item', output: 'class'
+    endcapture
+    capture content_reveal_style
+      render 'scroll-reveal-item', output: 'style', index: 1
+    endcapture
+    assign group_class = group_class | append: ' ' | append: content_reveal_class | strip
+  endif
+%}
+
 {% capture children %}
   {% content_for 'blocks' %}
 {% endcapture %}
 
 {% render 'group',
-  class: 'media-with-content__content',
+  class: group_class,
   children: children,
   settings: block.settings,
-  shopify_attributes: block.shopify_attributes
+  shopify_attributes: block.shopify_attributes,
+  style: content_reveal_style
 %}
 
 {% schema %}

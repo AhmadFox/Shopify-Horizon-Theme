@@ -73,6 +73,9 @@
         {% render 'spacing-style', settings: section.settings %}
       "
       data-testid="section-content"
+      {% if settings.animations_reveal_on_scroll and section.index > 1 %}
+        data-scroll-reveal-cascade
+      {% endif %}
     >
       {{ children }}
     </div>
