@@ -1,3 +1,7 @@
+{%- comment -%}
+  theme-editor.js registers beforeunload (bfcache blocker). Only include via
+  request.design_mode in layout — never ship to storefront buyers.
+{%- endcomment -%}
 <script
   src="{{ 'theme-editor.js' | asset_url }}"
   type="module"

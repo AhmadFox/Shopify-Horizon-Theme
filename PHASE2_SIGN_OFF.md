@@ -29,21 +29,23 @@ Theme helper: `collection-title` setting now shows contrast guidance in the edit
 
 Local `theme dev` (HTTP) will always fail: HTTPS, CORS, bf-cache, TTFB, some cookies.
 
-**Run on the published / preview HTTPS URL:**
+**Password-protected store:** unlock once, then run the matrix:
 
 ```bash
-# Example — replace THEME_ID / host
-npx lighthouse "https://YOUR-STORE.myshopify.com/?preview_theme_id=THEME_ID" \
-  --only-categories=performance,accessibility,best-practices \
-  --form-factor=mobile --output=json \
-  --output-path=../docs/lighthouse-reports/prod-home-mobile.json
+cd /path/to/theme_liquid
+STOREFRONT_PASSWORD='…' node docs/scripts/run-https-lighthouse.mjs
+STOREFRONT_PASSWORD='…' node docs/scripts/run-https-lighthouse.mjs --form-factor=desktop
+# Optional: PREVIEW_THEME_ID=… STORE_HOST=dkhount-partner-test.myshopify.com
 ```
 
-Repeat for: `/`, `/collections`, one collection handle, one product, `/blogs/news`, privacy policy, cart, search.
-
-Save JSON under `docs/lighthouse-reports/` (outside theme root).
+Reports land in `docs/lighthouse-reports/prod-*-YYYYMMDD.json`.
 
 **Pass criteria:** Performance / Accessibility / Best Practices → goal 100 (or document residual platform-only fails).
+
+### bfcache note
+
+Theme: `theme-editor.js` (`beforeunload`) loads only in `request.design_mode`. `scroll-container.js` uses `pagehide` (bfcache-safe).  
+Platform may still report bf-cache failures (`Cache-Control: no-store`, Shop Pay / WPM, `IgnoreEventAndEvict`) — not fully clearable from theme Liquid.
 
 ---
 

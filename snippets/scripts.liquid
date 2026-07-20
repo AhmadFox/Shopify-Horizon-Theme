@@ -33,8 +33,6 @@
       assign load_product_card_scripts = true
       assign load_slideshow_scripts = true
       assign load_quantity_scripts = true
-      assign load_media_scripts = true
-      assign load_rte_scripts = true
     when 'cart'
       assign load_product_card_scripts = true
       assign load_quantity_scripts = true
@@ -106,11 +104,13 @@
 ></script>
 
 {% if settings.page_transition_enabled or settings.transition_to_main_product %}
-<script
-  src="{{ 'view-transitions.js' | asset_url }}"
-  async
-  blocking="render"
-></script>
+  <script
+    src="{{ 'view-transitions.js' | asset_url }}"
+    async
+    {% if settings.page_transition_enabled %}
+      blocking="render"
+    {% endif %}
+  ></script>
 {% endif %}
 
 <link

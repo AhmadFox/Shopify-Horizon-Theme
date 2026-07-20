@@ -1,2 +1,5 @@
-{{ 'overflow-list.css' | asset_url | preload_tag: as: 'style' }}
 {{ 'base.css' | asset_url | stylesheet_tag: preload: true }}
+{%- comment -%}
+  overflow-list.css is loaded by snippets/overflow-list.liquid when the component mounts
+  (header/filters). Avoid a global style preload that competes with LCP discovery.
+{%- endcomment -%}
