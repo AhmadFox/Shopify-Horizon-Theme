@@ -101,8 +101,8 @@
             assign product_card_lazy_load = lazy_load_flag | strip
           %}
           <div
-            class="resource-list__item {% render 'scroll-reveal-item', output: 'class' %}"
-            style="{% render 'scroll-reveal-item', output: 'style', index: forloop.index %}"
+            class="resource-list__item{% if block_settings.layout_type != 'carousel' and block_settings.carousel_on_mobile == false %} {% render 'scroll-reveal-item', output: 'class' %}{% endif %}"
+            style="{% if block_settings.layout_type != 'carousel' and block_settings.carousel_on_mobile == false %}{% render 'scroll-reveal-item', output: 'style', index: forloop.index %}{% endif %}"
           >
             {% content_for 'block',
               type: '_product-card',

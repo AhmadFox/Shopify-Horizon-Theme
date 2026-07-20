@@ -33,6 +33,20 @@
       animation: none;
       transform: none;
     }
+
+    /*
+      Carousel / slideshow slides: transform + opacity on slide children breaks
+      horizontal swipe (resource-list / related products). Match stock Horizon —
+      scroll-reveal is for grids, not swipeable tracks.
+    */
+    :root:not(.scroll-reveal--disabled) .resource-list__carousel .scroll-trigger.animate--fade-in,
+    :root:not(.scroll-reveal--disabled) .resource-list__carousel .scroll-trigger.animate--slide-in,
+    :root:not(.scroll-reveal--disabled) slideshow-slide .scroll-trigger.animate--fade-in,
+    :root:not(.scroll-reveal--disabled) slideshow-slide .scroll-trigger.animate--slide-in {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
   }
 
   @keyframes scroll-reveal-fade-in {
