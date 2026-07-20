@@ -1,127 +1,152 @@
-
-
-{% if section.blocks.size > 1 %}
-  <script
-    src="{{ 'announcement-bar.js' | asset_url }}"
-    type="module"
-    fetchpriority="low"
-  ></script>
-{% endif %}
-
 {% render 'contrast-override', background_color: section.settings.background_color, section_id: section.id %}
+
+{%- liquid
+  # Keep existing speed (2–10s) as a duration control: higher = slower loop.
+  assign marquee_duration = section.settings.speed | times: 6
+  assign marquee_gap = 48
+
+  # Repeat the message set inside each track so short content still fills the viewport
+  # without JS measuring widths (pure CSS marquee).
+  assign fill_repeats = 1
+  if section.blocks.size == 1
+    assign fill_repeats = 4
+  elsif section.blocks.size == 2
+    assign fill_repeats = 3
+  elsif section.blocks.size == 3
+    assign fill_repeats = 2
+  endif
+-%}
+
+{%- capture announcement_items -%}
+  {% content_for 'blocks' %}
+{%- endcapture -%}
 
 <div class="section-background color-custom-{{ section.id }}"></div>
 <aside
   class="announcement-bar spacing-style section section--{{ section.settings.section_width }} color-custom-{{ section.id }}"
-  style="{% render 'spacing-padding', settings: section.settings %}; --border-bottom-width: {{ section.settings.divider_width }}px;{% if section.settings.divider_color != blank %} --color-border: {{ section.settings.divider_color }};{% endif %}"
+  style="
+    {% render 'spacing-padding', settings: section.settings %}
+    --border-bottom-width: {{ section.settings.divider_width }}px;
+    {% if section.settings.divider_color != blank %}--color-border: {{ section.settings.divider_color }};{% endif %}
+    --announcement-marquee-duration: {{ marquee_duration }}s;
+    --announcement-gap: {{ marquee_gap }}px;
+  "
+  role="region"
+  aria-label="{{ 'accessibility.announcements' | t }}"
 >
-  {% liquid
-    assign autoplay = false
-    assign show_arrows = false
-    if section.blocks.size > 1
-      assign autoplay = true
-      assign show_arrows = true
-    endif
-  %}
+  <div class="announcement-bar__viewport">
+    <div class="announcement-bar__track">
+      <div class="announcement-bar__group">
+        {%- for i in (1..fill_repeats) -%}
+          {{ announcement_items }}
+        {%- endfor -%}
+      </div>
 
-  <announcement-bar-component
-    class="announcement-bar__slider"
-    {% if autoplay == true %}
-      autoplay="{{ section.settings.speed }}" aria-live="polite"
-    {% endif %}
-  >
-    {% if show_arrows %}
-      {% render 'slideshow-arrows', icon_style: 'chevron' %}
-    {% endif %}
-
-    <div class="announcement-bar__slides">
-      {% content_for 'blocks' %}
+      <div
+        class="announcement-bar__group"
+        aria-hidden="true"
+      >
+        {%- for i in (1..fill_repeats) -%}
+          {{ announcement_items }}
+        {%- endfor -%}
+      </div>
     </div>
-  </announcement-bar-component>
+  </div>
 </aside>
 
 {% stylesheet %}
   .announcement-bar {
     border-block-end: var(--border-bottom-width) solid var(--color-border);
+    overflow: hidden;
   }
 
-  .announcement-bar__slider {
+  .announcement-bar__viewport {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  /*
+    Force LTR flex geometry on the track so translateX(-50%) is seamless in both
+    document directions. Item text direction is restored from the document dir.
+  */
+  .announcement-bar__track {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    position: relative;
-
-    @media screen and (max-width: 749px) {
-      grid-column: 1 / -1;
-    }
+    width: max-content;
+    gap: var(--announcement-gap);
+    direction: ltr;
+    will-change: transform;
   }
 
-  .announcement-bar__slides {
-    display: grid;
-    grid: [stack] auto / [stack] auto;
-    width: calc(100% - var(--button-size) * 2);
-    max-width: 680px;
-    margin-inline: auto;
-  }
-
-  .announcement-bar__slides > * {
-    grid-area: stack;
-  }
-
-  .announcement-bar__slide {
-    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
-    content-visibility: visible;
-
-    &[aria-hidden='true'] {
-      opacity: 0;
-      visibility: hidden;
-    }
-  }
-
-  .announcement-bar__slider slideshow-arrows {
-    padding: 0;
-    mix-blend-mode: normal;
-  }
-
-  .announcement-bar__slider slideshow-arrows .slideshow-control {
-    color: var(--color-foreground);
-  }
-
-  .announcement-bar__slider .slideshow-control {
+  .announcement-bar__group {
     display: flex;
-    padding: 0;
-    width: var(--button-size);
-    height: var(--button-size);
+    flex: 0 0 auto;
     align-items: center;
-    justify-content: center;
-    opacity: 1;
-    animation: none;
-
-    @media screen and (min-width: 750px) {
-      --slideshow-control-offset: calc((var(--button-size) - var(--icon-size-xs)) / 2);
-
-      .section--page-width &.slideshow-control--previous {
-        transform: translateX(var(--slideshow-control-offset));
-      }
-    }
+    gap: var(--announcement-gap);
+    min-width: max-content;
   }
 
-  .announcement-bar__slider .slideshow-control .svg-wrapper {
-    width: var(--icon-size-xs);
-    height: var(--icon-size-xs);
+  /* Restore reading direction for each message (Arabic RTL / English LTR). */
+  :root[dir='rtl'] .announcement-bar__item {
+    direction: rtl;
+    unicode-bidi: isolate;
   }
 
-  .announcement-bar__slide {
-    place-content: center;
+  :root[dir='ltr'] .announcement-bar__item,
+  :root:not([dir]) .announcement-bar__item {
+    direction: ltr;
+    unicode-bidi: isolate;
   }
 
-  .announcement-bar__text:first-child {
+  .announcement-bar__item {
+    flex: 0 0 auto;
+    max-width: none;
+  }
+
+  .announcement-bar .announcement-bar__text,
+  .announcement-bar .announcement-bar__text * {
     margin: 0;
+    white-space: nowrap;
+    line-height: 1.2;
+    text-wrap: nowrap;
   }
 
   .announcement-bar__link {
-    position: absolute;
-    inset: 0;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .announcement-bar__track {
+      animation: announcement-marquee var(--announcement-marquee-duration, 30s) linear infinite;
+    }
+
+    /* Natural ticker direction: LTR scrolls left, RTL scrolls right. */
+    :root[dir='rtl'] .announcement-bar__track {
+      animation-direction: reverse;
+    }
+
+    .announcement-bar__viewport:hover .announcement-bar__track {
+      animation-play-state: paused;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .announcement-bar__track {
+      animation: none;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .announcement-bar__group[aria-hidden='true'] {
+      display: none;
+    }
+  }
+
+  @keyframes announcement-marquee {
+    to {
+      transform: translate3d(calc(-50% - (var(--announcement-gap) / 2)), 0, 0);
+    }
   }
 {% endstylesheet %}
 

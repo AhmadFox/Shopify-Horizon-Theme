@@ -1,0 +1,44 @@
+{%- doc -%}
+  Renders one announcement-bar marquee item.
+
+  @param {object} block - The announcement block
+  @param {boolean} [enable_editor_attributes] - When true, outputs shopify_attributes for the theme editor
+{%- enddoc -%}
+
+{%- liquid
+  assign block_settings = block.settings
+  assign plain_text = block_settings.text | strip_newlines | strip_html | strip
+  assign enable_editor_attributes = enable_editor_attributes | default: false
+-%}
+
+{%- unless plain_text == blank -%}
+  <div
+    class="
+      announcement-bar__item
+      text-block
+      text-block--{{ block.id }}
+      custom-typography
+      {% if block_settings.font_size != blank %}custom-font-size{% endif %}
+      {% if block_settings.weight != blank %}custom-font-weight{% endif %}
+    "
+    style="
+      {% render 'typography-style', settings: block_settings, preset: 'custom' %}
+      --text-wrap: nowrap;
+      {% if block_settings.text_color != blank %}
+        --color: {{ block_settings.text_color }};
+        --color-rgb: {{ block_settings.text_color.rgb }};
+      {% endif %}
+    "
+    {% if enable_editor_attributes %}
+      {{ block.shopify_attributes }}
+    {% endif %}
+  >
+    {%- if block_settings.link != blank -%}
+      <a class="announcement-bar__link" href="{{ block_settings.link }}">
+        <span class="announcement-bar__text">{{ block_settings.text }}</span>
+      </a>
+    {%- else -%}
+      <p class="announcement-bar__text">{{ block_settings.text }}</p>
+    {%- endif -%}
+  </div>
+{%- endunless -%}

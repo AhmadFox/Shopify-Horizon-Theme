@@ -1105,7 +1105,7 @@
     "right": "Right",
     "right_padding": "Right padding",
     "row": "Row",
-    "scroll_speed": "Time to next announcement",
+    "scroll_speed": "Marquee scroll speed",
     "search": "Search",
     "search_icon": "Search icon",
     // Setting for search bar placement in header
