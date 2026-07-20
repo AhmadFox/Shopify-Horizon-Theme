@@ -35,17 +35,23 @@
     }
 
     /*
-      Carousel / slideshow slides: transform + opacity on slide children breaks
-      horizontal swipe (resource-list / related products). Match stock Horizon —
-      scroll-reveal is for grids, not swipeable tracks.
+      Carousel / slideshow: keep the same staggered appear as grids, but never use
+      translateY — transform on slide children breaks horizontal swipe.
+      Opacity-only fade preserves the lazy reveal without hurting drag.
     */
-    :root:not(.scroll-reveal--disabled) .resource-list__carousel .scroll-trigger.animate--fade-in,
     :root:not(.scroll-reveal--disabled) .resource-list__carousel .scroll-trigger.animate--slide-in,
-    :root:not(.scroll-reveal--disabled) slideshow-slide .scroll-trigger.animate--fade-in,
     :root:not(.scroll-reveal--disabled) slideshow-slide .scroll-trigger.animate--slide-in {
-      opacity: 1;
       transform: none;
-      animation: none;
+    }
+
+    :root:not(.scroll-reveal--disabled)
+      .resource-list__carousel
+      .scroll-trigger:not(.scroll-trigger--offscreen).animate--slide-in,
+    :root:not(.scroll-reveal--disabled)
+      slideshow-slide
+      .scroll-trigger:not(.scroll-trigger--offscreen).animate--slide-in {
+      animation-name: scroll-reveal-fade-in;
+      animation-delay: calc(var(--animation-order, 0) * 75ms);
     }
   }
 

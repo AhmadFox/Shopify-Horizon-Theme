@@ -3,6 +3,7 @@ import { getIntersectionRoot } from '@theme/scroll-container';
 const SCROLL_TRIGGER_CLASS = 'scroll-trigger';
 const OFFSCREEN_CLASS = 'scroll-trigger--offscreen';
 const DESIGN_MODE_CLASS = 'scroll-trigger--design-mode';
+const COMPLETE_CLASS = 'scroll-trigger--complete';
 const CASCADE_SELECTOR = '[data-scroll-reveal-cascade]';
 
 /**
@@ -30,11 +31,10 @@ function onIntersection(entries, observer) {
   entries.forEach((entry) => {
     const target = entry.target;
     if (entry.isIntersecting) {
-      if (target.classList.contains(OFFSCREEN_CLASS)) {
-        target.classList.remove(OFFSCREEN_CLASS);
-      }
+      target.classList.remove(OFFSCREEN_CLASS);
+      target.classList.add(COMPLETE_CLASS);
       observer.unobserve(target);
-    } else {
+    } else if (!target.classList.contains(COMPLETE_CLASS)) {
       // Match Dawn: mark offscreen only when the observer reports not intersecting.
       // Do not pre-apply offscreen before observe — that can fight first paint / scroll.
       target.classList.add(OFFSCREEN_CLASS);
@@ -43,10 +43,12 @@ function onIntersection(entries, observer) {
 }
 
 /**
+ * Observe scroll-trigger elements under a root (including content morphed in later,
+ * e.g. product recommendations).
  * @param {ParentNode} [rootEl]
  * @param {boolean} [isDesignModeEvent]
  */
-function initializeScrollReveal(rootEl = document, isDesignModeEvent = false) {
+export function initializeScrollReveal(rootEl = document, isDesignModeEvent = false) {
   decorateCascadeContainers(rootEl);
 
   const elements = rootEl.getElementsByClassName(SCROLL_TRIGGER_CLASS);
@@ -63,6 +65,7 @@ function initializeScrollReveal(rootEl = document, isDesignModeEvent = false) {
   });
 
   Array.from(elements).forEach((el) => {
+    if (el.classList.contains(COMPLETE_CLASS) || el.classList.contains(DESIGN_MODE_CLASS)) return;
     observer.observe(el);
   });
 }

@@ -1,5 +1,6 @@
 import { Component } from '@theme/component';
 import { morphSection } from '@theme/section-renderer';
+import { initializeScrollReveal } from '@theme/scroll-reveal';
 
 class ProductRecommendations extends Component {
   /**
@@ -98,6 +99,9 @@ class ProductRecommendations extends Component {
         if (result.data?.trim().length) {
           this.dataset.recommendationsPerformed = 'true';
           morphSection(sectionId, result.data, { mode: 'hydration', injectStylesheet: true });
+          // Recommendations load after first paint — observe newly morphed cards
+          // so they get the same staggered reveal as featured collection grids.
+          initializeScrollReveal(this);
         } else {
           this.#handleError(new Error('No recommendations available'));
         }

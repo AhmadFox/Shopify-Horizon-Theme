@@ -99,22 +99,10 @@
               render 'util-product-card-lazy-load', index: forloop.index, section: section, output: 'lazy_load'
             endcapture
             assign product_card_lazy_load = lazy_load_flag | strip
-
-            # Skip scroll-reveal on carousel tracks — transform breaks mobile swipe.
-            assign reveal_class = ''
-            assign reveal_style = ''
-            if section.settings.layout_type != 'carousel' and section.settings.carousel_on_mobile == false
-              capture reveal_class
-                render 'scroll-reveal-item', output: 'class'
-              endcapture
-              capture reveal_style
-                render 'scroll-reveal-item', output: 'style', index: forloop.index
-              endcapture
-            endif
           %}
           <div
-            class="resource-list__item {{ reveal_class | strip }}"
-            style="{{ reveal_style | strip }}"
+            class="resource-list__item {% render 'scroll-reveal-item', output: 'class' %}"
+            style="{% render 'scroll-reveal-item', output: 'style', index: forloop.index %}"
           >
             {% content_for 'block',
               type: '_product-card',
