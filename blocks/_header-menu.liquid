@@ -173,7 +173,10 @@
         <nav
           class="menu-list"
           aria-label="{{ 'accessibility.header_navigation_label' | t }}"
-          style="{% render 'menu-font-styles', settings: block_settings, menu_type: 'mega_menu' %}"
+          style="
+            {% render 'menu-font-styles', settings: block_settings, menu_type: 'mega_menu' %}
+            --menu-items-gap: {{ block_settings.menu_items_gap | default: 24 }}px;
+          "
         >
           {% assign class = 'overflow-menu' | append: background_color_classes %}
           {% render 'overflow-list',
@@ -268,6 +271,13 @@
     height: 100%;
   }
 
+  /* Desktop-only control for spacing between top-level menu items. */
+  @media screen and (min-width: 750px) {
+    .header-menu .menu-list {
+      --menu-horizontal-gap: var(--menu-items-gap, var(--gap-xl));
+    }
+  }
+
   .menu-list__list {
     display: flex;
     justify-content: var(--grid-area-alignment);
@@ -325,7 +335,7 @@
   }
 
   .menu-list__link-title {
-    padding-inline: calc(var(--gap-xl) / 2);
+    padding-inline: calc(var(--menu-horizontal-gap) / 2);
   }
   [slot='overflow'] .menu-list__link-title {
     padding-inline: 0;
@@ -754,6 +764,16 @@
       "id": "text_color",
       "label": "t:settings.text_color",
       "placeholder": "t:settings.default"
+    },
+    {
+      "type": "range",
+      "id": "menu_items_gap",
+      "label": "t:settings.menu_items_gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 24
     },
     {
       "type": "header",

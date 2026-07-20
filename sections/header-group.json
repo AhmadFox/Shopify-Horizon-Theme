@@ -84,6 +84,7 @@
           "static": true,
           "settings": {
             "menu": "main-menu",
+            "menu_items_gap": 24,
             "background_color": "{{ settings.color_palette.color9 }}",
             "text_color": "{{ settings.color_palette.color1 }}",
             "type_font_primary_size": "0.875rem",
