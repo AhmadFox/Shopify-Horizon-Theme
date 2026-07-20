@@ -425,6 +425,10 @@
       elsif bottom_row_blocks.size > 0
         assign custom_color_styles = true
         assign class = class | append: row_class
+        # Section-style padding ranges for the bottom menu row (line-height stays unchanged).
+        assign menu_pad_top = section.settings.menu_row_padding_top | default: 12
+        assign menu_pad_bottom = section.settings.menu_row_padding_bottom | default: 12
+        assign style = style | append: '--header-padding: [pad]px; --menu-row-padding-block-start: [pad_start]px; --menu-row-padding-block-end: [pad_end]px; ' | replace: '[pad]', menu_pad_top | replace: '[pad_start]', menu_pad_top | replace: '[pad_end]', menu_pad_bottom
       else
         assign custom_color_styles = false
       endif
@@ -987,8 +991,17 @@
     --padding-block-end: var(--header-padding);
   }
 
+  /*
+    Bottom menu row height comes from padding, not line-height.
+    Theme editor ranges set --menu-row-padding-*; fallback matches announcement bar (~12–13px).
+  */
   .header:not(.header--compact) .header__row--bottom {
-    --header-padding: var(--padding-xs);
+    --header-padding: var(--padding-lg);
+  }
+
+  .header:not(.header--compact) .header__row--bottom .header__columns {
+    --padding-block-start: var(--menu-row-padding-block-start, var(--header-padding));
+    --padding-block-end: var(--menu-row-padding-block-end, var(--header-padding));
   }
 
   .header--collapse-row-paddings {
@@ -1460,6 +1473,33 @@
         }
       ],
       "default": "standard"
+    },
+    {
+      "type": "header",
+      "content": "t:content.menu_row_padding",
+      "visible_if": "{{ section.settings.menu_row == 'bottom' }}"
+    },
+    {
+      "type": "range",
+      "id": "menu_row_padding_top",
+      "label": "t:settings.padding_top",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 12,
+      "visible_if": "{{ section.settings.menu_row == 'bottom' }}"
+    },
+    {
+      "type": "range",
+      "id": "menu_row_padding_bottom",
+      "label": "t:settings.padding_bottom",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 12,
+      "visible_if": "{{ section.settings.menu_row == 'bottom' }}"
     },
     {
       "type": "select",

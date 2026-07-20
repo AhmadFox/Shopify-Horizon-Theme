@@ -115,6 +115,8 @@
         "localization_row": "top",
         "section_width": "page-width",
         "section_height": "standard",
+        "menu_row_padding_top": 12,
+        "menu_row_padding_bottom": 12,
         "enable_sticky_header": "always",
         "divider_width": 0.5,
         "divider_size": "page-width",
