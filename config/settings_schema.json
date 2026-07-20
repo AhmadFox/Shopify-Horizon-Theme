@@ -1727,6 +1727,80 @@
     ]
   },
   {
+    "name": "t:names.back_to_top",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "t:info.back_to_top_enable_in_header"
+      },
+      {
+        "type": "color",
+        "id": "back_to_top_background",
+        "label": "t:settings.background",
+        "default": "{{ settings.color_palette.background }}"
+      },
+      {
+        "type": "color",
+        "id": "back_to_top_icon_color",
+        "label": "t:settings.icon_color",
+        "default": "{{ settings.color_palette.foreground }}"
+      },
+      {
+        "type": "color",
+        "id": "back_to_top_progress_color",
+        "label": "t:settings.progress_color",
+        "default": "{{ settings.color_palette.foreground }}"
+      },
+      {
+        "type": "color",
+        "id": "back_to_top_progress_track",
+        "label": "t:settings.progress_track_color",
+        "default": "{{ settings.color_palette.foreground }}",
+        "alpha": true
+      },
+      {
+        "type": "range",
+        "id": "back_to_top_border_width",
+        "label": "t:settings.border_width",
+        "min": 2,
+        "max": 6,
+        "step": 1,
+        "unit": "px",
+        "default": 3
+      },
+      {
+        "type": "range",
+        "id": "back_to_top_padding",
+        "label": "t:settings.padding",
+        "min": 6,
+        "max": 28,
+        "step": 1,
+        "unit": "px",
+        "default": 12
+      },
+      {
+        "type": "range",
+        "id": "back_to_top_icon_size",
+        "label": "t:settings.icon_size",
+        "min": 12,
+        "max": 32,
+        "step": 1,
+        "unit": "px",
+        "default": 16
+      },
+      {
+        "type": "range",
+        "id": "back_to_top_corner_radius",
+        "label": "t:settings.corner_radius",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "default": 8
+      }
+    ]
+  },
+  {
     "name": "t:names.drawers",
     "settings": [
       {

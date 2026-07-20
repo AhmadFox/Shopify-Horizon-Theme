@@ -1,0 +1,152 @@
+{%- doc -%}
+  Fixed jump-to-top control with a CSS scroll-driven progress border.
+  Progress uses CSS scroll-driven animations; click scrolls to y: 0 without changing the URL.
+
+  @param {object} section - Header section (for enable toggle)
+{%- enddoc -%}
+
+{%- if section.settings.enable_back_to_top -%}
+  <script
+    src="{{ 'back-to-top.js' | asset_url }}"
+    type="module"
+  ></script>
+
+  <back-to-top-component>
+    <button
+      type="button"
+      class="back-to-top"
+      style="
+        --back-to-top-bg: {{ settings.back_to_top_background }};
+        --back-to-top-icon: {{ settings.back_to_top_icon_color }};
+        --back-to-top-progress: {{ settings.back_to_top_progress_color }};
+        --back-to-top-track: {{ settings.back_to_top_progress_track }};
+        --back-to-top-border-width: {{ settings.back_to_top_border_width }}px;
+        --back-to-top-padding: {{ settings.back_to_top_padding }}px;
+        --back-to-top-icon-size: {{ settings.back_to_top_icon_size }}px;
+        --back-to-top-radius: {{ settings.back_to_top_corner_radius }}px;
+      "
+      aria-label="{{ 'accessibility.back_to_top' | t }}"
+      on:click="/scrollToTop"
+    >
+      <span class="back-to-top__icon svg-wrapper" aria-hidden="true">
+        {{- 'icon-arrow.svg' | inline_asset_content -}}
+      </span>
+    </button>
+  </back-to-top-component>
+{%- endif -%}
+
+{% stylesheet %}
+  @property --back-to-top-progress-value {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 0%;
+  }
+
+  .back-to-top {
+    --back-to-top-progress-value: 0%;
+    position: fixed;
+    inset-inline-end: max(1rem, env(safe-area-inset-right, 0px));
+    bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+    z-index: calc(var(--layer-sticky) + 2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: var(--back-to-top-padding, 12px);
+    border-radius: var(--back-to-top-radius, 8px);
+    color: var(--back-to-top-icon, var(--color-foreground));
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    font: inherit;
+    box-sizing: border-box;
+    border: var(--back-to-top-border-width, 3px) solid transparent;
+    background:
+      linear-gradient(var(--back-to-top-bg, var(--color-background)), var(--back-to-top-bg, var(--color-background)))
+        padding-box,
+      conic-gradient(
+          from -90deg,
+          var(--back-to-top-progress, var(--color-foreground)) var(--back-to-top-progress-value),
+          var(--back-to-top-track, transparent) 0
+        )
+        border-box;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(0.5rem);
+    transition: background-color 0.2s var(--ease-out-quad, ease-out);
+  }
+
+  .back-to-top:focus-visible {
+    outline: 2px solid var(--back-to-top-progress, var(--color-foreground));
+    outline-offset: 3px;
+  }
+
+  .back-to-top__icon {
+    display: inline-flex;
+    width: var(--back-to-top-icon-size, 16px);
+    height: var(--back-to-top-icon-size, 16px);
+    transform: rotate(-90deg);
+  }
+
+  .back-to-top__icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    .back-to-top {
+      animation:
+        back-to-top-progress linear both,
+        back-to-top-reveal linear both;
+      animation-timeline: scroll(root), scroll(root);
+      animation-range: 0% 100%, 0 160px;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .page-wrapper {
+      scroll-timeline-name: --page-scroll;
+      scroll-timeline-axis: block;
+    }
+
+    @supports (animation-timeline: scroll()) {
+      .back-to-top {
+        animation-timeline: --page-scroll, --page-scroll;
+      }
+    }
+  }
+
+  @keyframes back-to-top-progress {
+    to {
+      --back-to-top-progress-value: 100%;
+    }
+  }
+
+  @keyframes back-to-top-reveal {
+    from {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(0.5rem);
+    }
+
+    to {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+  }
+
+  @supports not (animation-timeline: scroll()) {
+    .back-to-top {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: none;
+      border-color: var(--back-to-top-progress, var(--color-foreground));
+      background: var(--back-to-top-bg, var(--color-background));
+    }
+  }
+{% endstylesheet %}

@@ -475,6 +475,8 @@
   {% endif %}
 </header-component>
 
+{% render 'back-to-top', section: section %}
+
 <script
   src="{{ 'header.js' | asset_url }}"
   type="module"
@@ -1520,6 +1522,13 @@
         }
       ],
       "default": "always"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_back_to_top",
+      "label": "t:settings.enable_back_to_top",
+      "default": false,
+      "info": "t:info.back_to_top_theme_settings"
     },
     {
       "type": "range",

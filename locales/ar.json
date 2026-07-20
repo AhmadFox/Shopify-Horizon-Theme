@@ -45,6 +45,7 @@
     "remove_item": "إزالة {{ title}}",
     "remove": "إزالة",
     "reset_search": "إعادة تعيين البحث",
+    "back_to_top": "العودة إلى الأعلى",
     "scroll_to": "التمرير إلى {{ title }}",
     "search_results_count": "تم العثور على {{ count }} نتيجة بحث لـ \"{{ query }}\"",
     "search_results_no_results": "لم يتم العثور على نتائج لـ \"{{ query }}\"",
