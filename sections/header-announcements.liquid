@@ -101,21 +101,28 @@
     overflow: hidden;
   }
 
+  /*
+    Isolate the marquee from document RTL. A max-content track in an RTL page
+    otherwise aligns to the right, so translateX(-50%) moves every message
+    off-screen and the bar looks empty.
+  */
   .announcement-bar__viewport {
     display: block;
     width: 100%;
     overflow: hidden;
+    direction: ltr;
+    text-align: start;
   }
 
-  /*
-    Force LTR flex geometry on the track so translateX(-50%) is seamless in both
-    document directions. Item text direction is restored from the document dir.
-  */
   .announcement-bar__track {
     display: flex;
     width: max-content;
+    max-width: none;
     gap: var(--announcement-gap);
     direction: ltr;
+    margin-inline: 0 auto;
+    position: relative;
+    inset-inline-start: 0;
     will-change: transform;
   }
 
