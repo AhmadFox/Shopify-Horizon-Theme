@@ -22,10 +22,14 @@
       assign load_quantity_scripts = true
       assign load_media_scripts = true
       assign load_rte_scripts = true
+      # Product media gallery + related-products resource-list carousel need slideshow.js
+      # (custom element registration). Gating it to index-only broke mobile swipe.
+      assign load_slideshow_scripts = true
     when 'collection', 'search'
       assign lazy_load_product_cards = true
       assign lazy_load_paginated_list = true
       assign load_quantity_scripts = true
+      assign load_slideshow_scripts = true
     when 'list-collections'
       assign load_collection_list_scripts = true
       assign lazy_load_paginated_list = true

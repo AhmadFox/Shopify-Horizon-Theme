@@ -520,18 +520,16 @@ export class Slideshow extends Component {
   #visibleSlides = [];
 
   /**
-   * Syncs aria-hidden and inert so hidden slides cannot receive focus.
+   * Syncs aria-hidden for assistive tech.
+   * Do not toggle inert here — inert blocks pointer/touch hit-testing on peek slides and
+   * breaks default Horizon carousel swipe (resource-list / related products).
    * @param {HTMLElement} slide
    * @param {boolean} visible
    */
   #setSlideVisibility(slide, visible) {
     slide.setAttribute('aria-hidden', String(!visible));
-
-    if (visible) {
-      slide.removeAttribute('inert');
-    } else {
-      slide.setAttribute('inert', '');
-    }
+    // Clear any leftover inert from older markup/hydration.
+    slide.removeAttribute('inert');
   }
 
   /**
