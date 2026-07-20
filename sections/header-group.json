@@ -68,8 +68,8 @@
           "static": true,
           "settings": {
             "hide_logo_on_home_page": false,
-            "padding-block-start": 6,
-            "padding-block-end": 6
+            "padding-block-start": 10,
+            "padding-block-end": 10
           },
           "blocks": {}
         },
@@ -117,7 +117,7 @@
         "section_height": "standard",
         "enable_sticky_header": "always",
         "divider_width": 0.5,
-        "divider_size": "full-width",
+        "divider_size": "page-width",
         "divider_color": "{{ settings.color_palette.color3 }}",
         "border_width": 0.5,
         "bottom_border_color": "{{ settings.color_palette.color3 }}",
