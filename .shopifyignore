@@ -1,0 +1,15 @@
+# Non-theme project files — keep out of Shopify theme sync / theme dev upload
+docs/*
+lighthouse-reports/*
+*.md
+!README.md
+scripts/*
+customizations/*
+.git/*
+.gitignore
+.shopifyignore
+.env
+.env.*
+.cursor/*
+.DS_Store
+*.log

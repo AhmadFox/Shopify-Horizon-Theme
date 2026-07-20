@@ -50,7 +50,7 @@ git push origin main   # → Shopify auto-syncs
 
 - Publish the connected theme once in Admin → **Online Store** → **Themes** → **Publish** for live traffic.
 - Develop on `feature/*` branches locally; only merge to `main` when ready to deploy.
-- Full guide: [docs/DEPLOY.md](docs/DEPLOY.md)
+- Full guide: [../docs/horizon/DEPLOY.md](../docs/horizon/DEPLOY.md)
 
 ## Branches
 
@@ -68,8 +68,8 @@ This repo uses a **manifest-based upgrade workflow** (not a direct git fork). Wh
 
 Documentation:
 
-- [docs/UPGRADE.md](docs/UPGRADE.md) — step-by-step merge and release process
-- [docs/CUSTOMIZATIONS.md](docs/CUSTOMIZATIONS.md) — what Dkhoun changed vs vanilla Horizon
+- [../docs/horizon/UPGRADE.md](../docs/horizon/UPGRADE.md) — step-by-step merge and release process
+- [../docs/horizon/CUSTOMIZATIONS.md](../docs/horizon/CUSTOMIZATIONS.md) — what Dkhoun changed vs vanilla Horizon
 - [customizations/manifest.txt](customizations/manifest.txt) — files auto-applied on upgrade
 
 ## License
