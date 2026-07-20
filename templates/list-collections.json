@@ -56,7 +56,7 @@
               "type": "text",
               "name": "t:names.text",
               "settings": {
-                "text": "<h1>جميع التصنيفات</h1>",
+                "text": "<h3>جميع التصنيفات</h3>",
                 "width": "100%",
                 "max_width": "narrow",
                 "alignment": "center",
