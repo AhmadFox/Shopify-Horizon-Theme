@@ -17,10 +17,21 @@
 {%- enddoc -%}
 
 {% liquid
-  assign widths = widths | default: '240, 352, 832, 1200, 1600, 1920, 2560, 3840'
   assign ref_image_to_transition = ''
   if settings.transition_to_main_product
     assign ref_image_to_transition = 'imagesToTransition[]'
+  endif
+
+  if preview_image_only
+    assign widths = widths | default: '200, 300, 400, 500, 600, 750, 900, 1100'
+    assign image_url_width = 1100
+  else
+    assign widths = widths | default: '240, 352, 832, 1200, 1600, 1920, 2560'
+    assign image_url_width = 2560
+  endif
+
+  if is_main_product_media
+    assign loading = 'eager'
   endif
 %}
 
@@ -30,10 +41,12 @@
   data-media-id="{{ media.id }}"
 >
   {% liquid
-    assign high_res_url = media.preview_image | image_url: width: 3840
+    assign high_res_url = media.preview_image | image_url: width: image_url_width
     assign fetch_priority = 'auto'
+    assign media_preload = false
     if is_main_product_media
       assign fetch_priority = 'high'
+      assign media_preload = true
     elsif loading == 'lazy'
       assign fetch_priority = 'low'
     endif
@@ -41,9 +54,12 @@
     assign image_width = media.preview_image.width
     assign image_height = media.preview_image.width | divided_by: media.preview_image.aspect_ratio | round
   %}
+  {%- if media_preload -%}
+    {{ media.preview_image | image_url: width: 1200 | preload_tag: as: 'image', fetchpriority: 'high' }}
+  {%- endif -%}
   {{
     media.preview_image
-    | image_url: width: 3840
+    | image_url: width: image_url_width
     | image_tag:
       widths: widths,
       width: image_width,

@@ -67,10 +67,13 @@
         assign image_preload = false
         assign fetchpriority = 'auto'
 
-        if block_index == 0 and section_index == 1
+        # First slide in early template sections is the home LCP candidate.
+        # section.index can be 2 when a thin section sits above the slideshow.
+        if block_index == 0 and section_index <= 2
           assign loading = 'eager'
           assign fetchpriority = 'high'
           assign image_preload = true
+          assign widths = '750, 1100, 1500, 1780, 2000, 2400'
         endif
 
         if block_index > 0
@@ -78,10 +81,18 @@
         endif
       -%}
 
+      {%- if image_preload -%}
+        {%- comment -%}
+          preload_tag injects into <head> with fetchpriority=high (image_tag preload omits it).
+          Width 1500 covers mobile LCP and most desktop first paint without oversizing.
+        {%- endcomment -%}
+        {{ preview_image | image_url: width: 1500 | preload_tag: as: 'image', fetchpriority: 'high' }}
+      {%- endif -%}
+
       {%- if block_settings.media_type_1 == 'image' -%}
         {{
           block_settings.image_1
-          | image_url: width: 3840
+          | image_url: width: 2400
           | image_tag:
             width: preview_image.width,
             height: height,
@@ -90,15 +101,14 @@
             class: 'slide__image',
             loading: loading,
             fetchpriority: fetchpriority,
-            decoding: 'async',
-            preload: image_preload
+            decoding: 'async'
         }}
       {%- else -%}
         {%- if block_settings.video_1.preview_image -%}
 
           {{
             block_settings.video_1.preview_image
-            | image_url: width: 3840
+            | image_url: width: 2400
             | image_tag:
               width: preview_image.width,
               height: height,
@@ -107,8 +117,7 @@
               loading: loading,
               class: 'slide__video-poster',
               fetchpriority: fetchpriority,
-              decoding: 'async',
-              preload: image_preload
+              decoding: 'async'
           }}
         {%- endif -%}
         {%- if block_index == 0 -%}
