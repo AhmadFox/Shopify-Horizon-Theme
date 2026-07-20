@@ -70,6 +70,7 @@ Documentation:
 
 - [../docs/horizon/UPGRADE.md](../docs/horizon/UPGRADE.md) — step-by-step merge and release process
 - [../docs/horizon/CUSTOMIZATIONS.md](../docs/horizon/CUSTOMIZATIONS.md) — what Dkhoun changed vs vanilla Horizon
+- [PHASE2_SIGN_OFF.md](PHASE2_SIGN_OFF.md) — Admin / production Lighthouse checklist (T-11, T-18–T-25)
 - [customizations/manifest.txt](customizations/manifest.txt) — files auto-applied on upgrade
 
 ## License

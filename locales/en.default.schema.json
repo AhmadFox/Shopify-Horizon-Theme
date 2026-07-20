@@ -66,6 +66,7 @@
     "cart_summary_mobile_colors": "On mobile, summary colors inherit from the cart section.",
     "colors": "Colors",
     "page_text_color_contrast_info": "Sections with a custom background color will use this text color only when there is sufficient color contrast.",
+    "collection_title_contrast": "Use a color with at least 4.5:1 contrast against the section background (WCAG AA). Light text on cream/beige often fails Lighthouse.",
     "collection_page": "Collection page",
     "complementary_products": "Complementary products must be set up using the Search & Discovery app. [Learn more](https://help.shopify.com/manual/online-store/search-and-discovery)",
     "content_layout": "Content layout",
