@@ -191,7 +191,7 @@
       "type": "footer-policy-list"
     },
     {
-      "type": "social-links"
+      "type": "payment-icons"
     }
   ],
   "presets": [
@@ -205,11 +205,15 @@
         "policy_list": {
           "type": "footer-policy-list"
         },
-        "social_icons": {
-          "type": "social-links"
+        "payment_icons": {
+          "type": "payment-icons",
+          "settings": {
+            "horizontal_alignment": "flex-end",
+            "gap": 10
+          }
         }
       },
-      "block_order": ["copyright", "policy_list", "social_icons"]
+      "block_order": ["copyright", "policy_list", "payment_icons"]
     }
   ]
 }

@@ -944,11 +944,24 @@
             "case": "none"
           },
           "blocks": {}
+        },
+        "footer_payment_icons": {
+          "type": "payment-icons",
+          "settings": {
+            "horizontal_alignment": "flex-end",
+            "gap": 10,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
         }
       },
       "block_order": [
         "footer_policy_list_VCdnpa",
-        "footer_copyright_jweRK8"
+        "footer_copyright_jweRK8",
+        "footer_payment_icons"
       ],
       "name": "t:names.utilities",
       "settings": {
