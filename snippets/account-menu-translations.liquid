@@ -36,14 +36,16 @@
         'account_menu.aria_labels.sign_in': {{ 'account_menu.aria_labels.sign_in' | t | json }}
       };
 
+      let observer = null;
+
       function patchAccountTranslations() {
         const dataEl = document.getElementById('shopify-customer-account-data');
-        if (!dataEl || dataEl.dataset.accountTranslationsPatched === 'true') return;
+        if (!dataEl || dataEl.dataset.accountTranslationsPatched === 'true') return false;
 
         try {
           const data = JSON.parse(dataEl.textContent);
           const translations = data?.shop?.customerAccountTranslations;
-          if (!Array.isArray(translations)) return;
+          if (!Array.isArray(translations)) return false;
 
           data.shop.customerAccountTranslations = translations.map((entry) => {
             const override = overrides[entry.key];
@@ -53,15 +55,22 @@
 
           dataEl.textContent = JSON.stringify(data);
           dataEl.dataset.accountTranslationsPatched = 'true';
-        } catch (error) {
-          console.warn('[account-menu-translations] Failed to patch account translations.', error);
+          return true;
+        } catch (_error) {
+          return false;
         }
       }
 
-      patchAccountTranslations();
-
-      if (!document.getElementById('shopify-customer-account-data')) {
-        new MutationObserver(() => patchAccountTranslations()).observe(document.documentElement, {
+      if (patchAccountTranslations()) {
+        // Already patched — nothing to observe.
+      } else if (!document.getElementById('shopify-customer-account-data')) {
+        observer = new MutationObserver(() => {
+          if (patchAccountTranslations() && observer) {
+            observer.disconnect();
+            observer = null;
+          }
+        });
+        observer.observe(document.documentElement, {
           childList: true,
           subtree: true
         });

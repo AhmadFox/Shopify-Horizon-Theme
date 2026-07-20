@@ -13,6 +13,7 @@ snippets/scroll-reveal-styles.liquid
 snippets/scroll-reveal-item.liquid
 snippets/product-grid-styles.liquid
 snippets/lazy-section-modules.liquid
+snippets/util-product-card-lazy-load.liquid
 assets/scroll-reveal.js
 assets/lazy-section-modules.js
 
