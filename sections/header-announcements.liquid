@@ -48,39 +48,8 @@
   endif
 -%}
 
-{%- liquid
-  assign separator_sizes = separator_icon_width | append: 'px'
--%}
-
-{%- capture announcement_separator -%}
-  {%- if has_separator_icon -%}
-    <span
-      class="announcement-bar__separator"
-      aria-hidden="true"
-    >
-      {{
-        separator_icon
-        | image_url: width: 120
-        | image_tag:
-          loading: 'lazy',
-          widths: '40, 60, 80, 120',
-          sizes: separator_sizes,
-          class: 'announcement-bar__separator-image',
-          alt: ''
-      }}
-    </span>
-  {%- endif -%}
-{%- endcapture -%}
-
 {%- capture announcement_items -%}
-  {%- if section.blocks.size > 0 -%}
-    {%- for block in section.blocks -%}
-      {% content_for 'block', type: block.type, id: block.id %}
-      {{- announcement_separator -}}
-    {%- endfor -%}
-  {%- else -%}
-    {% content_for 'blocks' %}
-  {%- endif -%}
+  {% content_for 'blocks' %}
 {%- endcapture -%}
 
 <div class="section-background color-custom-{{ section.id }}"></div>

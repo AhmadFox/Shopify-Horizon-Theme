@@ -1,5 +1,34 @@
 {% render 'announcement-bar-item', block: block, enable_editor_attributes: true %}
 
+{%- liquid
+  assign separator_icon = section.settings.separator_icon
+  assign separator_icon_width = section.settings.separator_icon_width | default: 20
+  assign separator_icon_height = section.settings.separator_icon_height | default: 20
+  assign separator_sizes = separator_icon_width | append: 'px'
+-%}
+
+{%- if separator_icon != blank -%}
+  <span
+    class="announcement-bar__separator"
+    aria-hidden="true"
+    style="
+      --announcement-icon-width: {{ separator_icon_width }}px;
+      --announcement-icon-height: {{ separator_icon_height }}px;
+    "
+  >
+    {{
+      separator_icon
+      | image_url: width: 120
+      | image_tag:
+        loading: 'lazy',
+        widths: '40, 60, 80, 120',
+        sizes: separator_sizes,
+        class: 'announcement-bar__separator-image',
+        alt: ''
+    }}
+  </span>
+{%- endif -%}
+
 {% stylesheet %}
   .announcement-bar__item {
     position: relative;
@@ -21,6 +50,23 @@
 
   .announcement-bar__link:hover .announcement-bar__text {
     text-decoration: underline;
+  }
+
+  .announcement-bar__separator {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: var(--announcement-icon-width, 20px);
+    height: var(--announcement-icon-height, 20px);
+    line-height: 0;
+  }
+
+  .announcement-bar__separator-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
   }
 {% endstylesheet %}
 
