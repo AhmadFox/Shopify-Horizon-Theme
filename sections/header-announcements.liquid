@@ -1,3 +1,27 @@
+{%- liquid
+  assign page_type = request.page_type | default: template.name
+  assign show_announcement_bar = false
+
+  case page_type
+    when 'index'
+      assign show_announcement_bar = section.settings.show_on_home
+    when 'list-collections'
+      assign show_announcement_bar = section.settings.show_on_collection_list
+    when 'collection'
+      assign show_announcement_bar = section.settings.show_on_collection
+    when 'product'
+      assign show_announcement_bar = section.settings.show_on_product
+    else
+      assign show_announcement_bar = section.settings.show_on_other
+  endcase
+
+  # Always render in the theme editor so merchants can edit while toggles are off.
+  if request.design_mode
+    assign show_announcement_bar = true
+  endif
+-%}
+
+{%- if show_announcement_bar -%}
 {% render 'contrast-override', background_color: section.settings.background_color, section_id: section.id %}
 
 {%- liquid
@@ -53,6 +77,7 @@
     </div>
   </div>
 </aside>
+{%- endif -%}
 
 {% stylesheet %}
   .announcement-bar {
@@ -162,6 +187,40 @@
     "groups": ["header"]
   },
   "settings": [
+    {
+      "type": "header",
+      "content": "t:content.visibility"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_on_home",
+      "label": "t:content.home_page",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_on_collection_list",
+      "label": "t:names.collection_list",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_on_collection",
+      "label": "t:content.collection_page",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_on_product",
+      "label": "t:content.product_page",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_on_other",
+      "label": "t:content.other_pages",
+      "default": true
+    },
     {
       "type": "range",
       "id": "speed",
