@@ -264,18 +264,14 @@
   }
 
   .menu-list {
+    /* Submenu / mega-menu feature grids keep the theme default gap. */
     --menu-horizontal-gap: var(--gap-xl);
     --menu-vertical-gap: var(--gap-xl);
+    /* Top-level desktop item spacing only (set via block setting). */
+    --menu-items-gap: var(--gap-xl);
 
     display: flex;
     height: 100%;
-  }
-
-  /* Desktop-only control for spacing between top-level menu items. */
-  @media screen and (min-width: 750px) {
-    .header-menu .menu-list {
-      --menu-horizontal-gap: var(--menu-items-gap, var(--gap-xl));
-    }
   }
 
   .menu-list__list {
@@ -335,8 +331,16 @@
   }
 
   .menu-list__link-title {
-    padding-inline: calc(var(--menu-horizontal-gap) / 2);
+    padding-inline: calc(var(--gap-xl) / 2);
   }
+
+  /* Desktop top-level items only — never feeds mega-menu / submenu feature gaps. */
+  @media screen and (min-width: 750px) {
+    .header-menu .menu-list__list-item:not([slot='overflow']) > .menu-list__link .menu-list__link-title {
+      padding-inline: calc(var(--menu-items-gap) / 2);
+    }
+  }
+
   [slot='overflow'] .menu-list__link-title {
     padding-inline: 0;
   }
@@ -379,7 +383,13 @@
     --focus-outline-size: calc(var(--focus-outline-offset) + var(--focus-outline-width));
 
     gap: 0;
-    margin-inline: calc(-1 * var(--menu-horizontal-gap) / 2);
+    margin-inline: calc(-1 * var(--gap-xl) / 2);
+  }
+
+  @media screen and (min-width: 750px) {
+    .header-menu .overflow-menu::part(list) {
+      margin-inline: calc(-1 * var(--menu-items-gap) / 2);
+    }
   }
 
   .overflow-menu {
