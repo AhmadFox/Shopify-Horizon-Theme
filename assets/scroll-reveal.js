@@ -1,3 +1,5 @@
+import { getIntersectionRoot } from '@theme/scroll-container';
+
 const SCROLL_TRIGGER_CLASS = 'scroll-trigger';
 const OFFSCREEN_CLASS = 'scroll-trigger--offscreen';
 const DESIGN_MODE_CLASS = 'scroll-trigger--design-mode';
@@ -25,7 +27,7 @@ function decorateCascadeContainers(rootEl) {
  * @param {IntersectionObserver} observer
  */
 function onIntersection(entries, observer) {
-  entries.forEach((entry, index) => {
+  entries.forEach((entry) => {
     const target = entry.target;
     if (entry.isIntersecting) {
       if (target.classList.contains(OFFSCREEN_CLASS)) {
@@ -33,6 +35,8 @@ function onIntersection(entries, observer) {
       }
       observer.unobserve(target);
     } else {
+      // Match Dawn: mark offscreen only when the observer reports not intersecting.
+      // Do not pre-apply offscreen before observe — that can fight first paint / scroll.
       target.classList.add(OFFSCREEN_CLASS);
     }
   });
@@ -54,11 +58,11 @@ function initializeScrollReveal(rootEl = document, isDesignModeEvent = false) {
   }
 
   const observer = new IntersectionObserver(onIntersection, {
+    root: getIntersectionRoot(),
     rootMargin: '0px 0px -50px 0px',
   });
 
   Array.from(elements).forEach((el) => {
-    el.classList.add(OFFSCREEN_CLASS);
     observer.observe(el);
   });
 }

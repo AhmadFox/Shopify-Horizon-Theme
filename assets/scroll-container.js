@@ -90,7 +90,37 @@ function restoreSavedScrollTop(savedScrollTop) {
   container.scrollTo({ top: targetScrollTop, behavior: 'instant' });
 }
 
-window.addEventListener('pageshow', () => {
+/**
+ * True for a full browser reload (F5 / address-bar refresh).
+ * On reload we must not restore a prior scrollTop — that jumps the homepage
+ * past the hero/slideshow under the header.
+ *
+ * @returns {boolean}
+ */
+function isPageReload() {
+  const navigationEntry = performance.getEntriesByType?.('navigation')?.[0];
+  if (navigationEntry && 'type' in navigationEntry) {
+    return navigationEntry.type === 'reload';
+  }
+  // Legacy PerformanceNavigation timing
+  return typeof performance !== 'undefined' && performance.navigation?.type === 1;
+}
+
+window.addEventListener('pageshow', (event) => {
+  // bfcache restore still needs scroll; hard reload should start at the top.
+  if (!event.persisted && isPageReload()) {
+    try {
+      const currentState = typeof history.state === 'object' && history.state !== null ? history.state : {};
+      if ('scrollTop' in currentState) {
+        const { scrollTop: _discard, ...rest } = currentState;
+        history.replaceState(rest, '');
+      }
+    } catch (_) {
+      // ignore replaceState failures
+    }
+    return;
+  }
+
   const scrollTop = history.state?.scrollTop;
   if (scrollTop == null) return;
 
