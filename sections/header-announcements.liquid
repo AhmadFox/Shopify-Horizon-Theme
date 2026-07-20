@@ -25,9 +25,9 @@
 {% render 'contrast-override', background_color: section.settings.background_color, section_id: section.id %}
 
 {%- liquid
-  # Keep existing speed (2–10s) as a duration control: higher = slower loop.
+  # Speed setting controls loop duration: higher = slower marquee.
   assign marquee_duration = section.settings.speed | times: 6
-  assign marquee_gap = 48
+  assign marquee_gap = section.settings.gap | default: 48
   assign separator_icon = section.settings.separator_icon
   assign separator_icon_width = section.settings.separator_icon_width | default: 20
   assign separator_icon_height = section.settings.separator_icon_height | default: 20
@@ -266,9 +266,19 @@
       "id": "speed",
       "label": "t:settings.scroll_speed",
       "min": 2,
-      "max": 10,
+      "max": 20,
       "default": 5,
       "unit": "sec"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "t:settings.gap",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 48
     },
     {
       "type": "header",
