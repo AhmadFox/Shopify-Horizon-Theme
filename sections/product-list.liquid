@@ -38,6 +38,10 @@
             render 'util-product-card-lazy-load', index: forloop.index, section: section, output: 'lazy_load'
           endcapture
           assign product_card_lazy_load = lazy_load_flag | strip
+          capture lcp_flag
+            render 'util-product-card-lazy-load', index: forloop.index, section: section, output: 'is_lcp'
+          endcapture
+          assign product_card_is_lcp = lcp_flag | strip
         %}
         <div
           class="resource-list__item {% render 'scroll-reveal-item', output: 'class' %}"

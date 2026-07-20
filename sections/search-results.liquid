@@ -61,6 +61,10 @@
               render 'util-product-card-lazy-load', index: forloop.index, section: section, page: paginate.current_page, output: 'lazy_load'
             endcapture
             assign product_card_lazy_load = lazy_load_flag | strip
+            capture lcp_flag
+              render 'util-product-card-lazy-load', index: forloop.index, section: section, page: paginate.current_page, output: 'is_lcp'
+            endcapture
+            assign product_card_is_lcp = lcp_flag | strip
           %}
           <li
             id="{{ section.id }}-{{ product.id }}"

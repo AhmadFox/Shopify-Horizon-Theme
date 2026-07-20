@@ -154,9 +154,16 @@
             continue
           endif
 
+          assign card_is_lcp = false
           if forloop.first and card_lazy_load == false
             assign loading = 'eager'
             assign sizes = image_sizes
+            # Only the first grid card on collection/search is the page LCP candidate.
+            if product_card_is_lcp == true or product_card_is_lcp == 'true'
+              if template.name == 'collection' or template.name == 'search' or template.name == 'list-collections'
+                assign card_is_lcp = true
+              endif
+            endif
           endif
 
           assign class = 'product-media-container media-fit product-media-container--[media_type]' | replace: '[media_type]', media.media_type
@@ -165,7 +172,12 @@
           endif
 
           capture slideshow_children
-            render 'product-media', media: media, sizes: sizes, loading: loading, preview_image_only: true
+            render 'product-media',
+              media: media,
+              sizes: sizes,
+              loading: loading,
+              preview_image_only: true,
+              is_main_product_media: card_is_lcp
           endcapture
 
           render 'slideshow-slide', slide_id: media.id, index: forloop.index0, hidden: hidden, class: class, attributes: attributes, children: slideshow_children, media_fit: media_fit
