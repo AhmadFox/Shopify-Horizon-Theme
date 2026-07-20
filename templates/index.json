@@ -635,11 +635,11 @@
           "type": "text",
           "name": "t:names.heading",
           "settings": {
-            "text": "<h2>Subscribe to our emails</h2>",
+            "text": "<h2>اشترك بالنشرة الاخبارية</h2>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
-            "type_preset": "rte",
+            "type_preset": "h3",
             "font": "var(--font-body--family)",
             "font_size": "1rem",
             "line_height": "normal",
@@ -660,7 +660,7 @@
         "text_i9ibAt": {
           "type": "text",
           "settings": {
-            "text": "<p>Be the first to know about new collections and special offers. </p>",
+            "text": "<p>كن اول من يعلم باخر الاخبار والعروض اخر الاصدارات</p>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
