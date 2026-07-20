@@ -111,7 +111,12 @@
           data-blog-index="{{ section.id }}-{{ forloop.index }}"
           style="{% render 'scroll-reveal-item', output: 'style', index: forloop.index %}"
         >
-          {% content_for 'block', id: 'static-blog-post-card', type: '_blog-post-card', article: article %}
+          {% content_for 'block',
+            id: 'static-blog-post-card',
+            type: '_blog-post-card',
+            article: article,
+            eager_image: forloop.first
+          %}
         </div>
       {% endfor %}
     </div>

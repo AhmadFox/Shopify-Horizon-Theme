@@ -1,6 +1,7 @@
 
 
 {%- assign block_settings = block.settings -%}
+{%- assign eager_image = eager_image | default: false -%}
 
 {% liquid
   if block_settings.background_color != blank
@@ -21,7 +22,7 @@
   style="--text-align: {{ block_settings.alignment }}"
 >
   {% if article.image %}
-    {% content_for 'block', id: 'image', type: '_blog-post-image', article: article %}
+    {% content_for 'block', id: 'image', type: '_blog-post-image', article: article, eager_image: eager_image %}
   {% endif %}
 
   <div class="blog-post-card__content">

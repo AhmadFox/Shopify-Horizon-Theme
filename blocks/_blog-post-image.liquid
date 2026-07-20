@@ -4,9 +4,11 @@
   Renders the blog post image block.
 
   @param {object} article - The article object
+  @param {boolean} [eager_image] - When true, loads as LCP candidate (first card only)
 {%- enddoc -%}
 
 {%- assign image = article.image -%}
+{%- assign eager_image = eager_image | default: false -%}
 
 {%- assign block_settings = block.settings -%}
 <div class="blog-post-card__image-container">
@@ -20,8 +22,14 @@
         {{ image | image_url }} {{ image.width }}w
       "
       src="{{ image | image_url: width: 1100 }}"
-      loading="eager"
-      fetchpriority="high"
+      {% if eager_image %}
+        loading="eager"
+        fetchpriority="high"
+      {% else %}
+        loading="lazy"
+        fetchpriority="low"
+        decoding="async"
+      {% endif %}
       width="{{ image.width }}"
       height="{{ image.height }}"
       alt="{{ image.alt | escape }}"
