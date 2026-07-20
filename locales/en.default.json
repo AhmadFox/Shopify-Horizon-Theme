@@ -141,6 +141,13 @@
     "payment_methods": "Payment methods",
     "slider_label": "Slider"
   },
+  "sections": {
+    "footer_trust": {
+      "tax_number": "Tax number:",
+      "commercial_register": "Commercial register:",
+      "store_qr": "Store verification QR code"
+    }
+  },
   "blogs": {
     "article": {
       "comments_heading": {

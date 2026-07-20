@@ -1,0 +1,652 @@
+{% liquid
+  assign block_settings = block.settings
+  assign show_language = block_settings.show_language
+  assign show_country = block_settings.show_country
+
+  if localization.available_languages.size <= 1
+    assign show_language = false
+  endif
+
+  if localization.available_countries.size <= 1
+    assign show_country = false
+  endif
+
+  assign button_font_size = block_settings.button_font_size | default: '0.875rem'
+  assign localization_font = '--menu-localization-font: var(--font-[localization_font]--family); ' | replace: '[localization_font]', block_settings.localization_font
+  assign localization_font_size = '--menu-localization-font-size: [localization_font_size]; ' | replace: '[localization_font_size]', button_font_size
+  assign localization_icon_sizes = '--localization-flag-size: var(--menu-localization-font-size); --localization-list-flag-size: 24px; --localization-caret-size: var(--icon-size-xs); '
+  assign color_shadow = '--color-shadow: rgb(var(--color-foreground-rgb) / var(--opacity-10-25));'
+  assign form_style = localization_font | append: localization_font_size | append: localization_icon_sizes | append: color_shadow
+  assign localization_button_style = localization_font | append: localization_font_size | append: localization_icon_sizes
+  assign panel_id = 'dropdown-localization-results-' | append: block.id
+  assign position_mobile = block_settings.position_mobile | default: 'center'
+  assign position_tablet = block_settings.position_tablet | default: position_mobile
+  assign position_desktop = block_settings.position_desktop | default: position_tablet
+%}
+
+<div
+  class="footer-localization utilities-apps-item"
+  style="
+    {% render 'utilities-apps-layout-vars', settings: block_settings %}
+    --loc-title-gap: {{ block_settings.title_gap }}px;
+    {% if block_settings.button_text_color != blank %}
+      --loc-button-color: {{ block_settings.button_text_color }};
+    {% elsif block_settings.text_color != blank %}
+      --loc-button-color: {{ block_settings.text_color }};
+    {% endif %}
+    --menu-localization-font-size: {{ button_font_size }};
+  "
+  data-position-mobile="{{ position_mobile }}"
+  data-position-tablet="{{ position_tablet }}"
+  data-position-desktop="{{ position_desktop }}"
+  {{ block.shopify_attributes }}
+>
+  {%- if block_settings.heading != blank -%}
+    <p
+      class="
+        footer-localization__heading
+        {{ block_settings.type_preset }}
+        {% if block_settings.type_preset == 'custom' %}
+          custom-typography
+          {% if block_settings.font_size != blank %}custom-font-size{% endif %}
+        {% endif %}
+      "
+      style="
+        {% render 'typography-style', settings: block_settings %}
+        {% if block_settings.text_color != blank %}
+          --color: {{ block_settings.text_color }};
+          color: {{ block_settings.text_color }};
+        {% endif %}
+      "
+    >
+      {{ block_settings.heading }}
+    </p>
+  {%- endif -%}
+
+  {%- if show_language or show_country -%}
+    {% if show_language and show_country == false %}
+      <div class="dropdown-localization footer-localization__dropdown">
+        {% render 'localization-form',
+          show_country: show_country,
+          show_language: show_language,
+          localization_style: 'dropdown',
+          form_style: form_style,
+          form_id: block.id
+        %}
+      </div>
+    {% elsif show_country %}
+      <dropdown-localization-component class="dropdown-localization footer-localization__dropdown">
+        <button
+          type="button"
+          class="button dropdown-localization__button localization-selector footer-localization__button"
+          aria-expanded="false"
+          aria-controls="{{ panel_id }}"
+          ref="button"
+          on:click="/toggleSelector"
+          style="{{ localization_button_style }}"
+        >
+          {% if show_country %}
+            {% if block_settings.country_selector_style %}
+              <span
+                class="icon-flag"
+                style="
+                  background-image: url({{- localization.country | image_url: width: 32 }});
+                  --size-shadow: 4px;
+                  --color-shadow: rgb(var(--color-foreground-rgb) / var(--opacity-30-60));
+                "
+              ></span>
+            {% endif %}
+            <span
+              class="dropdown-localization__label"
+              data-testid="localization-currency-code"
+            >
+              {%- liquid
+                if localization.language.iso_code == 'ar'
+                  assign localization_currency_label = localization.country.currency.symbol
+                  assign localization_language_label = 'عربي'
+                else
+                  assign localization_currency_label = localization.country.currency.iso_code
+                  assign localization_language_label = localization.language.iso_code | upcase
+                endif
+              -%}
+              {%- if show_language -%}
+                {{- localization_currency_label }} / {{ localization_language_label -}}
+              {%- else -%}
+                {{- localization_currency_label -}}
+              {%- endif -%}
+            </span>
+          {% endif %}
+          <span class="visually-hidden">
+            {{- 'accessibility.localization_region_and_language' | t -}}
+          </span>
+          <span class="svg-wrapper icon-caret">
+            {{- 'icon-caret.svg' | inline_asset_content -}}
+          </span>
+        </button>
+
+        <div
+          id="{{ panel_id }}"
+          class="localization-wrapper footer-localization__panel"
+          hidden
+          ref="panel"
+        >
+          {% render 'localization-form',
+            show_country: show_country,
+            show_language: show_language,
+            localization_style: 'dropdown',
+            form_style: form_style,
+            form_id: block.id
+          %}
+        </div>
+      </dropdown-localization-component>
+    {% endif %}
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .footer-localization {
+    --ua-align: var(--ua-align-mobile, center);
+    --ua-position: var(--ua-position-mobile, center);
+    --ua-text: var(--ua-text-mobile, center);
+    display: flex;
+    flex-direction: column;
+    align-items: var(--ua-align);
+    justify-content: flex-start;
+    gap: var(--loc-title-gap, 8px);
+    width: 100%;
+    min-width: 0;
+    text-align: var(--ua-text, center);
+
+    @media screen and (min-width: 750px) {
+      --ua-align: var(--ua-align-tablet, var(--ua-align-mobile, center));
+      --ua-position: var(--ua-position-tablet, var(--ua-position-mobile, center));
+      --ua-text: var(--ua-text-tablet, var(--ua-text-mobile, center));
+    }
+
+    @media screen and (min-width: 990px) {
+      --ua-align: var(--ua-align-desktop, var(--ua-align-tablet, center));
+      --ua-position: var(--ua-position-desktop, var(--ua-position-tablet, center));
+      --ua-text: var(--ua-text-desktop, var(--ua-text-tablet, center));
+    }
+  }
+
+  .footer-localization__heading {
+    margin: 0;
+    width: 100%;
+    line-height: 1.3;
+    color: var(--color, var(--color-foreground));
+    font-family: var(--font-family, inherit);
+    font-size: var(--font-size, 1rem);
+    font-weight: var(--font-weight, 600);
+    letter-spacing: var(--letter-spacing, normal);
+    text-transform: var(--text-transform, none);
+    text-wrap: var(--text-wrap, pretty);
+  }
+
+  .footer-localization__dropdown {
+    position: relative;
+    background-color: transparent;
+  }
+
+  .footer-localization .dropdown-localization__button {
+    display: flex;
+    position: relative;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--menu-localization-font);
+    font-size: var(--menu-localization-font-size);
+    font-weight: 500;
+    padding-inline: var(--padding-2xs);
+    margin-inline: calc(-1 * var(--padding-2xs));
+    color: var(--loc-button-color, var(--color-foreground));
+  }
+
+  .footer-localization .dropdown-localization__button .svg-wrapper.icon-caret {
+    height: var(--localization-caret-size, var(--icon-size-xs));
+    width: var(--localization-caret-size, var(--icon-size-xs));
+    flex-shrink: 0;
+    transition: transform var(--animation-speed) var(--animation-easing);
+  }
+
+  .footer-localization .dropdown-localization__button .icon-flag {
+    width: var(--localization-flag-size, var(--menu-localization-font-size, var(--icon-size-sm)));
+    height: var(--localization-flag-size, var(--menu-localization-font-size, var(--icon-size-sm)));
+    clip-path: circle(50%);
+    background-position: center;
+    background-size: cover;
+    margin-inline-end: 4px;
+    position: relative;
+  }
+
+  .footer-localization .dropdown-localization__button .icon-flag::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 var(--size-shadow) var(--color-shadow);
+    border-radius: 50%;
+  }
+
+  .footer-localization .dropdown-localization__button[aria-expanded='true'] .icon-caret svg {
+    transform: rotate(180deg);
+  }
+
+  .footer-localization .dropdown-localization__button,
+  .footer-localization .dropdown-localization__button:hover {
+    box-shadow: none;
+    background-color: transparent;
+    border-color: transparent;
+  }
+
+  .footer-localization .localization-form__list {
+    max-height: 20.5rem;
+  }
+
+  .footer-localization .localization-wrapper {
+    --panel-x: -50%;
+    position: absolute;
+    z-index: calc(var(--layer-raised) + 2);
+    border-radius: var(--style-border-radius-popover);
+    box-shadow: var(--shadow-popover);
+    border: var(--style-border-popover);
+    background-color: var(--color-background);
+    max-height: 27.5rem;
+    max-inline-size: calc(100vw - var(--page-margin) * 2);
+    bottom: calc(100% + 10px);
+    top: auto;
+    inset-inline-start: 50%;
+    inset-inline-end: auto;
+    transition-property: display, opacity, translate;
+    transition-duration: 0.3s;
+    transition-timing-function: var(--ease-out-quad);
+    transition-behavior: allow-discrete;
+    translate: var(--panel-x) -12px;
+    opacity: 0;
+  }
+
+  .footer-localization .localization-wrapper:not([hidden]) {
+    translate: var(--panel-x) 0;
+    opacity: 1;
+  }
+
+  @starting-style {
+    .footer-localization .localization-wrapper:not([hidden]) {
+      translate: var(--panel-x) -12px;
+      opacity: 0;
+    }
+  }
+
+  .footer-localization[data-position-mobile='flex-start'] .localization-wrapper {
+    --panel-x: 0;
+    inset-inline-start: 0;
+    inset-inline-end: auto;
+  }
+
+  .footer-localization[data-position-mobile='flex-end'] .localization-wrapper {
+    --panel-x: 0;
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+  }
+
+  .footer-localization[data-position-mobile='center'] .localization-wrapper {
+    --panel-x: -50%;
+    inset-inline-start: 50%;
+    inset-inline-end: auto;
+  }
+
+  @media screen and (min-width: 750px) {
+    .footer-localization[data-position-tablet='flex-start'] .localization-wrapper {
+      --panel-x: 0;
+      inset-inline-start: 0;
+      inset-inline-end: auto;
+    }
+
+    .footer-localization[data-position-tablet='flex-end'] .localization-wrapper {
+      --panel-x: 0;
+      inset-inline-start: auto;
+      inset-inline-end: 0;
+    }
+
+    .footer-localization[data-position-tablet='center'] .localization-wrapper {
+      --panel-x: -50%;
+      inset-inline-start: 50%;
+      inset-inline-end: auto;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .footer-localization[data-position-desktop='flex-start'] .localization-wrapper {
+      --panel-x: 0;
+      inset-inline-start: 0;
+      inset-inline-end: auto;
+    }
+
+    .footer-localization[data-position-desktop='flex-end'] .localization-wrapper {
+      --panel-x: 0;
+      inset-inline-start: auto;
+      inset-inline-end: 0;
+    }
+
+    .footer-localization[data-position-desktop='center'] .localization-wrapper {
+      --panel-x: -50%;
+      inset-inline-start: 50%;
+      inset-inline-end: auto;
+    }
+  }
+
+  .footer-localization .country-filter {
+    position: relative;
+    padding: 8px;
+  }
+
+  .footer-localization .country-filter__input {
+    border: none;
+  }
+
+  .footer-localization .localization-form__list-item {
+    margin-inline: 8px;
+  }
+
+  .footer-localization .language-selector.language-selector {
+    padding-block: 10px;
+    padding-inline: 16px 8px;
+  }
+
+  .footer-localization .localization-form__currency {
+    width: max-content;
+    opacity: 0;
+    visibility: hidden;
+    transition: none;
+  }
+
+  .footer-localization .localization-form__select:hover {
+    background-color: rgb(var(--color-foreground-rgb) / var(--opacity-8));
+  }
+
+  .footer-localization
+    :is(
+      .localization-form__list-item:hover,
+      .localization-form__list-item[aria-selected='true'],
+      .localization-form__list-item[aria-current='true']
+    )
+    .localization-form__currency {
+    opacity: 1;
+    color: var(--color-foreground-muted);
+    transition: opacity var(--animation-speed-slow) var(--animation-easing);
+    visibility: visible;
+  }
+
+  .footer-localization .language-selector:where(:not(.top-shadow)) {
+    font-weight: 500;
+  }
+
+  .footer-localization .dropdown-localization:not(dropdown-localization-component) .language-selector {
+    font-family: var(--menu-localization-font);
+    font-size: var(--menu-localization-font-size);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:names.footer_localization",
+  "tag": null,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_country",
+      "label": "t:settings.country_region",
+      "info": "t:info.manage_countries_regions",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "country_selector_style",
+      "label": "t:settings.flag",
+      "default": true,
+      "visible_if": "{{ block.settings.show_country }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_language",
+      "label": "t:settings.language_selector",
+      "info": "t:info.manage_languages",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:settings.alignment"
+    },
+    {
+      "type": "select",
+      "id": "alignment_mobile",
+      "label": "t:options.mobile",
+      "options": [
+        { "value": "flex-start", "label": "t:options.left" },
+        { "value": "center", "label": "t:options.center" },
+        { "value": "flex-end", "label": "t:options.right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "alignment_tablet",
+      "label": "t:options.tablet",
+      "options": [
+        { "value": "flex-start", "label": "t:options.left" },
+        { "value": "center", "label": "t:options.center" },
+        { "value": "flex-end", "label": "t:options.right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "alignment_desktop",
+      "label": "t:options.desktop",
+      "options": [
+        { "value": "flex-start", "label": "t:options.left" },
+        { "value": "center", "label": "t:options.center" },
+        { "value": "flex-end", "label": "t:options.right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "t:settings.position"
+    },
+    {
+      "type": "select",
+      "id": "position_mobile",
+      "label": "t:options.mobile",
+      "options": [
+        { "value": "flex-start", "label": "t:options.left" },
+        { "value": "center", "label": "t:options.center" },
+        { "value": "flex-end", "label": "t:options.right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "position_tablet",
+      "label": "t:options.tablet",
+      "options": [
+        { "value": "flex-start", "label": "t:options.left" },
+        { "value": "center", "label": "t:options.center" },
+        { "value": "flex-end", "label": "t:options.right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "position_desktop",
+      "label": "t:options.desktop",
+      "options": [
+        { "value": "flex-start", "label": "t:options.left" },
+        { "value": "center", "label": "t:options.center" },
+        { "value": "flex-end", "label": "t:options.right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "t:content.heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:settings.heading",
+      "default": "Language & market"
+    },
+    {
+      "type": "header",
+      "content": "t:content.typography"
+    },
+    {
+      "type": "select",
+      "id": "type_preset",
+      "label": "t:settings.preset",
+      "options": [
+        { "value": "paragraph", "label": "t:options.paragraph" },
+        { "value": "h1", "label": "t:options.h1" },
+        { "value": "h2", "label": "t:options.h2" },
+        { "value": "h3", "label": "t:options.h3" },
+        { "value": "h4", "label": "t:options.h4" },
+        { "value": "h5", "label": "t:options.h5" },
+        { "value": "h6", "label": "t:options.h6" },
+        { "value": "custom", "label": "t:options.custom" }
+      ],
+      "default": "custom",
+      "info": "t:info.edit_presets_in_theme_settings"
+    },
+    {
+      "type": "select",
+      "id": "font",
+      "label": "t:settings.font",
+      "options": [
+        { "value": "var(--font-body--family)", "label": "t:options.body" },
+        { "value": "var(--font-subheading--family)", "label": "t:options.subheading" },
+        { "value": "var(--font-heading--family)", "label": "t:options.heading" },
+        { "value": "var(--font-accent--family)", "label": "t:options.accent" }
+      ],
+      "default": "var(--font-body--family)",
+      "visible_if": "{{ block.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "font_size",
+      "label": "t:settings.size",
+      "options": [
+        { "value": "0.625rem", "label": "10px" },
+        { "value": "0.75rem", "label": "12px" },
+        { "value": "0.875rem", "label": "14px" },
+        { "value": "1rem", "label": "16px" },
+        { "value": "1.125rem", "label": "18px" },
+        { "value": "1.25rem", "label": "20px" },
+        { "value": "1.5rem", "label": "24px" }
+      ],
+      "default": "1rem",
+      "visible_if": "{{ block.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "line_height",
+      "label": "t:settings.line_height",
+      "options": [
+        { "value": "tight", "label": "t:options.tight" },
+        { "value": "normal", "label": "t:options.normal" },
+        { "value": "loose", "label": "t:options.loose" }
+      ],
+      "default": "normal",
+      "visible_if": "{{ block.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "letter_spacing",
+      "label": "t:settings.letter_spacing",
+      "options": [
+        { "value": "tight", "label": "t:options.tight" },
+        { "value": "normal", "label": "t:options.normal" },
+        { "value": "loose", "label": "t:options.loose" }
+      ],
+      "default": "normal",
+      "visible_if": "{{ block.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "case",
+      "label": "t:settings.case",
+      "options": [
+        { "value": "none", "label": "t:options.default" },
+        { "value": "uppercase", "label": "t:options.uppercase" }
+      ],
+      "default": "none",
+      "visible_if": "{{ block.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.appearance"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:settings.text_color",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "range",
+      "id": "title_gap",
+      "label": "t:settings.vertical_gap",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "t:names.localization"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "t:settings.text_color",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "select",
+      "id": "button_font_size",
+      "label": "t:settings.size",
+      "options": [
+        { "value": "0.625rem", "label": "10px" },
+        { "value": "0.75rem", "label": "12px" },
+        { "value": "0.875rem", "label": "14px" },
+        { "value": "1rem", "label": "16px" },
+        { "value": "1.125rem", "label": "18px" }
+      ],
+      "default": "0.875rem"
+    },
+    {
+      "type": "select",
+      "id": "localization_font",
+      "label": "t:settings.font",
+      "options": [
+        {
+          "value": "heading",
+          "label": "t:options.heading"
+        },
+        {
+          "value": "subheading",
+          "label": "t:options.subheading"
+        },
+        {
+          "value": "body",
+          "label": "t:options.body"
+        },
+        {
+          "value": "accent",
+          "label": "t:options.accent"
+        }
+      ],
+      "default": "body"
+    }
+  ]
+}
+{% endschema %}

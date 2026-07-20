@@ -17,7 +17,31 @@
     class="payment-icons__list"
     role="list"
   >
-    {% content_for 'blocks' %}
+    {%- for i in (1..10) -%}
+      {%- liquid
+        assign icon_key = 'icon_' | append: i
+        assign name_key = 'name_' | append: i
+        assign icon_image = block_settings[icon_key]
+        assign icon_name = block_settings[name_key] | strip
+      -%}
+      {%- if icon_image != blank -%}
+        <li class="payment-icons__item">
+          {{
+            icon_image
+            | image_url: width: 120
+            | image_tag:
+              class: 'icon icon--full-color',
+              loading: 'lazy',
+              widths: '40, 60, 80, 120',
+              sizes: '38px',
+              alt: icon_name
+          }}
+          {%- if icon_name != blank -%}
+            <span class="visually-hidden">{{ icon_name }}</span>
+          {%- endif -%}
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
   </ul>
 </div>
 
@@ -46,12 +70,6 @@
 {
   "name": "t:names.payment_icons",
   "tag": null,
-  "max_blocks": 10,
-  "blocks": [
-    {
-      "type": "_payment-icon"
-    }
-  ],
   "settings": [
     {
       "type": "select",
@@ -75,7 +93,7 @@
           "label": "t:options.space_between"
         }
       ],
-      "default": "flex-start"
+      "default": "center"
     },
     {
       "type": "range",
@@ -86,6 +104,153 @@
       "step": 1,
       "unit": "px",
       "default": 10
+    },
+    {
+      "type": "header",
+      "content": "t:content.payment_icon_1"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_1",
+      "label": "t:settings.icon"
+    },
+    {
+      "type": "text",
+      "id": "name_1",
+      "label": "t:settings.title",
+      "default": "Visa"
+    },
+    {
+      "type": "header",
+      "content": "t:content.payment_icon_2"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_2",
+      "label": "t:settings.icon"
+    },
+    {
+      "type": "text",
+      "id": "name_2",
+      "label": "t:settings.title",
+      "default": "Mastercard"
+    },
+    {
+      "type": "header",
+      "content": "t:content.payment_icon_3"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_3",
+      "label": "t:settings.icon"
+    },
+    {
+      "type": "text",
+      "id": "name_3",
+      "label": "t:settings.title",
+      "default": "Mada"
+    },
+    {
+      "type": "header",
+      "content": "t:content.payment_icon_4"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_4",
+      "label": "t:settings.icon"
+    },
+    {
+      "type": "text",
+      "id": "name_4",
+      "label": "t:settings.title",
+      "default": "Tabby"
+    },
+    {
+      "type": "header",
+      "content": "t:content.payment_icon_5"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_5",
+      "label": "t:settings.icon"
+    },
+    {
+      "type": "text",
+      "id": "name_5",
+      "label": "t:settings.title",
+      "default": "Tamara"
+    },
+    {
+      "type": "header",
+      "content": "t:content.payment_icon_6"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_6",
+      "label": "t:settings.icon"
+    },
+    {
+      "type": "text",
+      "id": "name_6",
+      "label": "t:settings.title",
+      "default": "Apple Pay"
+    },
+    {
+      "type": "header",
+      "content": "t:content.payment_icon_7"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_7",
+      "label": "t:settings.icon"
+    },
+    {
+      "type": "text",
+      "id": "name_7",
+      "label": "t:settings.title",
+      "default": "COD"
+    },
+    {
+      "type": "header",
+      "content": "t:content.payment_icon_8"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_8",
+      "label": "t:settings.icon"
+    },
+    {
+      "type": "text",
+      "id": "name_8",
+      "label": "t:settings.title"
+    },
+    {
+      "type": "header",
+      "content": "t:content.payment_icon_9"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_9",
+      "label": "t:settings.icon"
+    },
+    {
+      "type": "text",
+      "id": "name_9",
+      "label": "t:settings.title"
+    },
+    {
+      "type": "header",
+      "content": "t:content.payment_icon_10"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_10",
+      "label": "t:settings.icon"
+    },
+    {
+      "type": "text",
+      "id": "name_10",
+      "label": "t:settings.title"
     },
     {
       "type": "header",
@@ -135,28 +300,7 @@
   "presets": [
     {
       "name": "t:names.payment_icons",
-      "category": "t:categories.footer",
-      "blocks": {
-        "payment_icon_1": {
-          "type": "_payment-icon",
-          "settings": {
-            "name": "Visa"
-          }
-        },
-        "payment_icon_2": {
-          "type": "_payment-icon",
-          "settings": {
-            "name": "Mastercard"
-          }
-        },
-        "payment_icon_3": {
-          "type": "_payment-icon",
-          "settings": {
-            "name": "Mada"
-          }
-        }
-      },
-      "block_order": ["payment_icon_1", "payment_icon_2", "payment_icon_3"]
+      "category": "t:categories.footer"
     }
   ]
 }

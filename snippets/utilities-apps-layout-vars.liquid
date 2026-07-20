@@ -1,0 +1,49 @@
+{%- doc -%}
+  Outputs CSS custom properties for responsive alignment and position.
+
+  @param {object} settings - Block settings with alignment_*/position_* keys
+{%- enddoc -%}
+{%- liquid
+  assign align_mobile = settings.alignment_mobile | default: 'center'
+  assign align_tablet = settings.alignment_tablet | default: align_mobile
+  assign align_desktop = settings.alignment_desktop | default: align_tablet
+  assign position_mobile = settings.position_mobile | default: 'center'
+  assign position_tablet = settings.position_tablet | default: position_mobile
+  assign position_desktop = settings.position_desktop | default: position_tablet
+
+  case align_mobile
+    when 'flex-start'
+      assign text_mobile = 'start'
+    when 'flex-end'
+      assign text_mobile = 'end'
+    else
+      assign text_mobile = 'center'
+  endcase
+
+  case align_tablet
+    when 'flex-start'
+      assign text_tablet = 'start'
+    when 'flex-end'
+      assign text_tablet = 'end'
+    else
+      assign text_tablet = 'center'
+  endcase
+
+  case align_desktop
+    when 'flex-start'
+      assign text_desktop = 'start'
+    when 'flex-end'
+      assign text_desktop = 'end'
+    else
+      assign text_desktop = 'center'
+  endcase
+-%}
+--ua-align-mobile: {{ align_mobile }};
+--ua-align-tablet: {{ align_tablet }};
+--ua-align-desktop: {{ align_desktop }};
+--ua-position-mobile: {{ position_mobile }};
+--ua-position-tablet: {{ position_tablet }};
+--ua-position-desktop: {{ position_desktop }};
+--ua-text-mobile: {{ text_mobile }};
+--ua-text-tablet: {{ text_tablet }};
+--ua-text-desktop: {{ text_desktop }};

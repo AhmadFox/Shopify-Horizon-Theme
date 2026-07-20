@@ -1,0 +1,228 @@
+{% liquid
+  if section.settings.background_color != blank
+    render 'contrast-override', background_color: section.settings.background_color, section_id: section.id
+  endif
+%}
+
+<div
+  class="section-background{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}"
+></div>
+<div
+  class="section section--{{ section.settings.section_width }}{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}"
+  {{ section.shopify_attributes }}
+>
+  <div
+    class="utilities-apps utilities-apps--blocks-{{ section.blocks.size }} spacing-style"
+    style="{% render 'spacing-style', settings: section.settings %} --border-width: {{ section.settings.divider_thickness }}px;{% if section.settings.divider_color != blank %} --divider-color: {{ section.settings.divider_color }};{% endif %} --gap: {{ section.settings.gap }}px;"
+    data-testid="footer-utilities-apps"
+    {% if settings.animations_reveal_on_scroll %}
+      data-scroll-reveal-cascade
+    {% endif %}
+  >
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .utilities-apps {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap);
+    border-top: var(--border-width) solid var(--divider-color, var(--color-border));
+    color: var(--color-foreground-muted);
+    align-items: start;
+  }
+
+  .utilities-apps > *,
+  .utilities-apps .utilities-apps-item {
+    --ua-position: var(--ua-position-mobile, center);
+    min-width: 0;
+    width: 100%;
+    justify-self: var(--ua-position);
+    max-width: 100%;
+  }
+
+  @media screen and (min-width: 750px) {
+    .utilities-apps--blocks-2 {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+
+    .utilities-apps--blocks-3 {
+      grid-template-columns: 1fr 1fr 1fr;
+      align-items: center;
+    }
+
+    .utilities-apps > *,
+    .utilities-apps .utilities-apps-item {
+      --ua-position: var(--ua-position-tablet, var(--ua-position-mobile, center));
+      width: auto;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .utilities-apps > *,
+    .utilities-apps .utilities-apps-item {
+      --ua-position: var(--ua-position-desktop, var(--ua-position-tablet, center));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:names.utilities_apps",
+  "tag": "div",
+  "class": "footer-utilities-apps",
+  "max_blocks": 3,
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:settings.width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:options.page"
+        },
+        {
+          "value": "full-width",
+          "label": "t:options.full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "t:settings.gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 31
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:settings.background_color",
+      "default": "{{ settings.color_palette.color1 }}"
+    },
+    {
+      "type": "range",
+      "id": "divider_thickness",
+      "label": "t:settings.divider_thickness",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "unit": "px",
+      "default": 0.5
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "t:settings.divider_color",
+      "visible_if": "{{ section.settings.divider_thickness > 0 }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    }
+  ],
+  "blocks": [
+    {
+      "type": "footer-credentials"
+    },
+    {
+      "type": "_footer-localization"
+    },
+    {
+      "type": "footer-mobile-apps"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.utilities_apps",
+      "category": "t:categories.footer",
+      "blocks": {
+        "localization": {
+          "type": "_footer-localization",
+          "settings": {
+            "show_country": true,
+            "country_selector_style": true,
+            "show_language": true,
+            "alignment_mobile": "center",
+            "alignment_tablet": "flex-start",
+            "alignment_desktop": "flex-start",
+            "position_mobile": "center",
+            "position_tablet": "flex-start",
+            "position_desktop": "flex-start",
+            "localization_font": "accent"
+          }
+        },
+        "mobile_apps": {
+          "type": "footer-mobile-apps",
+          "settings": {
+            "heading": "حمل التطبيق دخون. تجربة اسرع  وعروض حصرية وهدايا",
+            "app_store_label": "App Store",
+            "google_play_label": "Google Play",
+            "alignment_mobile": "center",
+            "alignment_tablet": "center",
+            "alignment_desktop": "center",
+            "position_mobile": "center",
+            "position_tablet": "center",
+            "position_desktop": "center",
+            "gap": 8,
+            "badge_height": 36
+          }
+        },
+        "credentials": {
+          "type": "footer-credentials",
+          "settings": {
+            "tax_number_label": "الرقم الضريبي:",
+            "tax_number": "300606466710003",
+            "commercial_register_label": "السجل التجاري:",
+            "commercial_register": "1010292631",
+            "title_1": "Saudi Business Center",
+            "title_2": "Saudi Made",
+            "title_3": "Vision 2030",
+            "title_5": "VAT",
+            "alignment_mobile": "center",
+            "alignment_tablet": "flex-start",
+            "alignment_desktop": "flex-start",
+            "position_mobile": "center",
+            "position_tablet": "flex-end",
+            "position_desktop": "flex-end",
+            "gap": 10,
+            "badge_height": 52
+          }
+        }
+      },
+      "block_order": ["localization", "mobile_apps", "credentials"]
+    }
+  ]
+}
+{% endschema %}

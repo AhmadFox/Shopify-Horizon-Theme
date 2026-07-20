@@ -199,42 +199,28 @@
       "name": "t:names.policies_and_links",
       "category": "t:categories.footer",
       "blocks": {
-        "copyright": {
-          "type": "footer-copyright"
-        },
         "policy_list": {
           "type": "footer-policy-list"
         },
         "payment_icons": {
           "type": "payment-icons",
           "settings": {
-            "horizontal_alignment": "flex-end",
-            "gap": 10
-          },
-          "blocks": {
-            "payment_icon_1": {
-              "type": "_payment-icon",
-              "settings": {
-                "name": "Visa"
-              }
-            },
-            "payment_icon_2": {
-              "type": "_payment-icon",
-              "settings": {
-                "name": "Mastercard"
-              }
-            },
-            "payment_icon_3": {
-              "type": "_payment-icon",
-              "settings": {
-                "name": "Mada"
-              }
-            }
-          },
-          "block_order": ["payment_icon_1", "payment_icon_2", "payment_icon_3"]
+            "horizontal_alignment": "center",
+            "gap": 10,
+            "name_1": "Visa",
+            "name_2": "Mastercard",
+            "name_3": "Mada",
+            "name_4": "Tabby",
+            "name_5": "Tamara",
+            "name_6": "Apple Pay",
+            "name_7": "COD"
+          }
+        },
+        "copyright": {
+          "type": "footer-copyright"
         }
       },
-      "block_order": ["copyright", "policy_list", "payment_icons"]
+      "block_order": ["policy_list", "payment_icons", "copyright"]
     }
   ]
 }

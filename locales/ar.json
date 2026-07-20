@@ -127,6 +127,13 @@
     "payment_methods": "طرق الدفع",
     "slider_label": "شريط التمرير"
   },
+  "sections": {
+    "footer_trust": {
+      "tax_number": "الرقم الضريبي:",
+      "commercial_register": "السجل التجاري:",
+      "store_qr": "رمز التحقق من المتجر"
+    }
+  },
   "blogs": {
     "article": {
       "comments_heading": {
