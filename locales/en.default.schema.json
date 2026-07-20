@@ -28,8 +28,6 @@
     "product": "Product",
     "products": "Products",
     "product_list": "Featured collection",
-    "icon_between_messages": "Icon between messages",
-    "other_pages": "Other pages",
     "other_sections": "Other",
     "storytelling": "Storytelling",
     "text": "Text"
@@ -38,6 +36,8 @@
     "visible_if_collection_has_more_products": "Visible if collection has more products than shown",
     "advanced": "Advanced",
     "appearance": "Appearance",
+    "icon_between_messages": "Icon between messages",
+    "other_pages": "Other pages",
     "arrows": "Arrows",
     "background": "Background",
     "background_image": "Background image",
