@@ -28,6 +28,13 @@
   # Keep existing speed (2–10s) as a duration control: higher = slower loop.
   assign marquee_duration = section.settings.speed | times: 6
   assign marquee_gap = 48
+  assign separator_icon = section.settings.separator_icon
+  assign separator_icon_width = section.settings.separator_icon_width | default: 20
+  assign separator_icon_height = section.settings.separator_icon_height | default: 20
+  assign has_separator_icon = false
+  if separator_icon != blank
+    assign has_separator_icon = true
+  endif
 
   # Repeat the message set inside each track so short content still fills the viewport
   # without JS measuring widths (pure CSS marquee).
@@ -41,19 +48,59 @@
   endif
 -%}
 
+{%- liquid
+  assign separator_sizes = separator_icon_width | append: 'px'
+-%}
+
+{%- capture announcement_separator -%}
+  {%- if has_separator_icon -%}
+    <span
+      class="announcement-bar__separator"
+      aria-hidden="true"
+    >
+      {{
+        separator_icon
+        | image_url: width: 120
+        | image_tag:
+          loading: 'lazy',
+          widths: '40, 60, 80, 120',
+          sizes: separator_sizes,
+          class: 'announcement-bar__separator-image',
+          alt: ''
+      }}
+    </span>
+  {%- endif -%}
+{%- endcapture -%}
+
 {%- capture announcement_items -%}
-  {% content_for 'blocks' %}
+  {%- if section.blocks.size > 0 -%}
+    {%- for block in section.blocks -%}
+      {% content_for 'block', type: block.type, id: block.id %}
+      {{- announcement_separator -}}
+    {%- endfor -%}
+  {%- else -%}
+    {% content_for 'blocks' %}
+  {%- endif -%}
 {%- endcapture -%}
 
 <div class="section-background color-custom-{{ section.id }}"></div>
 <aside
-  class="announcement-bar spacing-style section section--{{ section.settings.section_width }} color-custom-{{ section.id }}"
+  class="
+    announcement-bar
+    spacing-style
+    section
+    section--{{ section.settings.section_width }}
+    color-custom-{{ section.id }}
+    {% if has_separator_icon %}announcement-bar--has-separator{% endif %}
+  "
   style="
     {% render 'spacing-padding', settings: section.settings %}
     --border-bottom-width: {{ section.settings.divider_width }}px;
     {% if section.settings.divider_color != blank %}--color-border: {{ section.settings.divider_color }};{% endif %}
     --announcement-marquee-duration: {{ marquee_duration }}s;
     --announcement-gap: {{ marquee_gap }}px;
+    --announcement-icon-width: {{ separator_icon_width }}px;
+    --announcement-icon-height: {{ separator_icon_height }}px;
   "
   role="region"
   aria-label="{{ 'accessibility.announcements' | t }}"
@@ -139,6 +186,23 @@
   .announcement-bar__link {
     color: inherit;
     text-decoration: none;
+  }
+
+  .announcement-bar__separator {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: var(--announcement-icon-width, 20px);
+    height: var(--announcement-icon-height, 20px);
+    line-height: 0;
+  }
+
+  .announcement-bar__separator-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -229,6 +293,37 @@
       "max": 10,
       "default": 5,
       "unit": "sec"
+    },
+    {
+      "type": "header",
+      "content": "t:content.icon_between_messages"
+    },
+    {
+      "type": "image_picker",
+      "id": "separator_icon",
+      "label": "t:settings.icon"
+    },
+    {
+      "type": "range",
+      "id": "separator_icon_width",
+      "label": "t:settings.width",
+      "min": 10,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "default": 20,
+      "visible_if": "{{ section.settings.separator_icon != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "separator_icon_height",
+      "label": "t:settings.height",
+      "min": 10,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "default": 20,
+      "visible_if": "{{ section.settings.separator_icon != blank }}"
     },
     {
       "type": "header",
