@@ -1,7 +1,4 @@
-
 {% assign block_settings = block.settings %}
-
-{%- assign block_settings = block.settings -%}
 
 <div
   class="
@@ -20,11 +17,7 @@
     class="payment-icons__list"
     role="list"
   >
-    {%- for type in shop.enabled_payment_types -%}
-      <li class="payment-icons__item">
-        {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
-      </li>
-    {%- endfor -%}
+    {% content_for 'blocks' %}
   </ul>
 </div>
 
@@ -53,6 +46,12 @@
 {
   "name": "t:names.payment_icons",
   "tag": null,
+  "max_blocks": 10,
+  "blocks": [
+    {
+      "type": "_payment-icon"
+    }
+  ],
   "settings": [
     {
       "type": "select",
@@ -136,7 +135,28 @@
   "presets": [
     {
       "name": "t:names.payment_icons",
-      "category": "t:categories.footer"
+      "category": "t:categories.footer",
+      "blocks": {
+        "payment_icon_1": {
+          "type": "_payment-icon",
+          "settings": {
+            "name": "Visa"
+          }
+        },
+        "payment_icon_2": {
+          "type": "_payment-icon",
+          "settings": {
+            "name": "Mastercard"
+          }
+        },
+        "payment_icon_3": {
+          "type": "_payment-icon",
+          "settings": {
+            "name": "Mada"
+          }
+        }
+      },
+      "block_order": ["payment_icon_1", "payment_icon_2", "payment_icon_3"]
     }
   ]
 }

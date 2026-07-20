@@ -954,7 +954,37 @@
             "padding-inline-start": 0,
             "padding-inline-end": 0
           },
-          "blocks": {}
+          "blocks": {
+            "payment_icon_1": {
+              "type": "_payment-icon",
+              "settings": {
+                "icon": "",
+                "name": "Visa"
+              },
+              "blocks": {}
+            },
+            "payment_icon_2": {
+              "type": "_payment-icon",
+              "settings": {
+                "icon": "",
+                "name": "Mastercard"
+              },
+              "blocks": {}
+            },
+            "payment_icon_3": {
+              "type": "_payment-icon",
+              "settings": {
+                "icon": "",
+                "name": "Mada"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "payment_icon_1",
+            "payment_icon_2",
+            "payment_icon_3"
+          ]
         }
       },
       "block_order": [
