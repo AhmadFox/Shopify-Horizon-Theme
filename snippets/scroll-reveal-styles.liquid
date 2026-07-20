@@ -53,6 +53,18 @@
       animation-name: scroll-reveal-fade-in;
       animation-delay: calc(var(--animation-order, 0) * 75ms);
     }
+
+    /*
+      Footer group: offscreen translateY extends past the navy section-background
+      and shows the page background as a white strip under the footer.
+      Keep footer content visible with no transform.
+    */
+    :root:not(.scroll-reveal--disabled) .shopify-section-group-footer-group .scroll-trigger.animate--fade-in,
+    :root:not(.scroll-reveal--disabled) .shopify-section-group-footer-group .scroll-trigger.animate--slide-in {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
   }
 
   @keyframes scroll-reveal-fade-in {
