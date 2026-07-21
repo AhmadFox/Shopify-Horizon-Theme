@@ -30,10 +30,12 @@
             icon_image
             | image_url: width: 120
             | image_tag:
-              class: 'icon icon--full-color',
+              class: 'payment-icons__icon icon icon--full-color',
               loading: 'lazy',
-              widths: '40, 60, 80, 120',
-              sizes: '38px',
+              widths: '40, 80, 120',
+              sizes: '40px',
+              width: 40,
+              height: 23,
               alt: icon_name
           }}
           {%- if icon_name != blank -%}
@@ -63,6 +65,13 @@
   .payment-icons__item {
     display: flex;
     align-items: center;
+  }
+
+  .payment-icons__icon {
+    display: block;
+    width: 40px;
+    height: 23px;
+    object-fit: cover;
   }
 {% endstylesheet %}
 
