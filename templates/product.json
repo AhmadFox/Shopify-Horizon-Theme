@@ -162,6 +162,10 @@
                 "price_tVjtKg"
               ]
             },
+            "klaviyo_reviews_product_reviews_summary_d6gJYE": {
+              "type": "shopify://apps/klaviyo-reviews/blocks/product-reviews-summary/db20e365-d984-4ac4-9655-e1588d951ca9",
+              "settings": {}
+            },
             "variant_picker_R3rGDr": {
               "type": "variant-picker",
               "settings": {
@@ -353,6 +357,7 @@
           },
           "block_order": [
             "group_icgrde",
+            "klaviyo_reviews_product_reviews_summary_d6gJYE",
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi",
             "accordion_dkrtyH"
@@ -512,10 +517,51 @@
         "padding-block-start": 60,
         "padding-block-end": 0
       }
+    },
+    "17846558607b002ee1": {
+      "type": "_blocks",
+      "blocks": {
+        "klaviyo_reviews_product_reviews_wdRyNh": {
+          "type": "shopify://apps/klaviyo-reviews/blocks/product-reviews/db20e365-d984-4ac4-9655-e1588d951ca9",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "klaviyo_reviews_product_reviews_wdRyNh"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
     }
   },
   "order": [
     "main",
-    "product_recommendations_qggXJq"
+    "product_recommendations_qggXJq",
+    "17846558607b002ee1"
   ]
 }
